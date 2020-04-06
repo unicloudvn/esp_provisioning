@@ -1,0 +1,31 @@
+name: esp_provisioning
+description: Espressif BLE Provisioning library
+version: 1.0.0+1
+author: TuanPM
+homepage: http://tuanpm.net
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+  flutter: ">=1.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  protobuf: ^1.0.1
+  cryptography: ^0.2.6
+  flutter_ble_lib: ^2.2.3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.tuanpm.esp_provisioning
+        pluginClass: EspProvisioningPlugin
+      ios:
+        pluginClass: EspProvisioningPlugin
