@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:meta/meta.dart';
+
 import 'proto/dart/constants.pbenum.dart';
 import 'proto/dart/wifi_config.pb.dart';
 import 'proto/dart/wifi_scan.pb.dart';
@@ -43,7 +43,7 @@ class EspProv {
     return transport.disconnect();
   }
 
-  Future<List<Map<String, dynamic>>> startScan() async {
+  Future<List<Map<String, dynamic>>> startScanWiFi() async {
     return await scan();
   }
 

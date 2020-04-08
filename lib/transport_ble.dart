@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
-import 'dart:typed_data';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
-import 'package:meta/meta.dart';
+
 import 'transport.dart';
 
 class TransportBLE implements ProvTransport {
