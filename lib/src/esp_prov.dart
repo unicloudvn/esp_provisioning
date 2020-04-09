@@ -58,7 +58,7 @@ class EspProv {
       {bool blocking = true,
       bool passive = false,
       int groupChannels = 5,
-      int periodMs = 120}) async {
+      int periodMs = 0}) async {
     WiFiScanPayload payload = WiFiScanPayload();
     payload.msg = WiFiScanMsgType.TypeCmdScanStart;
 
@@ -122,9 +122,17 @@ class EspProv {
     return ret;
   }
 
-  Future<List<Map<String, dynamic>>> scan() async {
+  Future<List<Map<String, dynamic>>> scan(
+      {bool blocking = true,
+      bool passive = false,
+      int groupChannels = 5,
+      int periodMs = 0}) async {
     try {
-      await startScanRequest();
+      await startScanRequest(
+          blocking: blocking,
+          passive: passive,
+          groupChannels: groupChannels,
+          periodMs: periodMs);
       var status = await scanStatusRequest();
       var resultCount = status.respScanStatus.resultCount;
       List<Map<String, dynamic>> ret = new List<Map<String, dynamic>>();
