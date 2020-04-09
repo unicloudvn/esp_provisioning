@@ -1,3 +1,4 @@
 ## 1.0.0
 
-* TODO: Describe initial release.
+- Support BLE Provisioning Security1
+
