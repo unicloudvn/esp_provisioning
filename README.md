@@ -45,3 +45,7 @@ Protocomm internally uses protobuf (protocol buffers) for secure session establi
 Protocomm provides framework for various transports - WiFi (SoftAP+HTTPD), BLE, console - in which case the handler invocation is automatically taken care of on the device side (see Transport Examples below for code snippets).
 
 Note that the client still needs to establish session (only for protocomm_security1) by performing the two way handshake. See Unified Provisioning for more details about the secure handshake logic.
+
+### License
+
+[Apache License Version 2.0](./LICENSE)
