@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:meta/meta.dart';
 
 import 'proto/dart/constants.pbenum.dart';
 import 'proto/dart/wifi_config.pb.dart';
@@ -14,7 +13,7 @@ class EspProv {
   ProvTransport transport;
   ProvSecurity security;
 
-  EspProv({@required this.transport, @required this.security});
+  EspProv({this.transport, this.security});
 
   Future<bool> establishSession() async {
     try {
@@ -147,7 +146,7 @@ class EspProv {
     return null;
   }
 
-  Future<bool> sendWifiConfig({@required String ssid, String password}) async {
+  Future<bool> sendWifiConfig({String ssid, String password}) async {
     var payload = WiFiConfigPayload();
     payload.msg = WiFiConfigMsgType.TypeCmdSetConfig;
 

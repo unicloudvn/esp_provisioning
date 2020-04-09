@@ -1,7 +1,7 @@
 name: esp_provisioning
 description: Espressif BLE Provisioning library
 version: 1.0.0+1
-author: TuanPM
+author: TuanPM <tuanpm@live.com>
 homepage: http://tuanpm.net
 
 environment:
