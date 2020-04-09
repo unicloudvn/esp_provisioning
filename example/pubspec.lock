@@ -22,6 +22,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  bloc:
+    dependency: transitive
+    description:
+      name: bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -71,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
+  equatable:
+    dependency: "direct main"
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   esp_provisioning:
     dependency: "direct main"
     description:
@@ -97,6 +111,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
+  flutter_bloc:
+    dependency: "direct main"
+    description:
+      name: flutter_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
+  flutter_spinkit:
+    dependency: "direct main"
+    description:
+      name: flutter_spinkit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.2+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -109,6 +137,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  io:
+    dependency: transitive
+    description:
+      name: io
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.4"
   js:
     dependency: transitive
     description:
@@ -116,6 +151,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.1+1"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.3"
   matcher:
     dependency: transitive
     description:
@@ -130,6 +172,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   path:
     dependency: transitive
     description:
@@ -137,6 +186,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
+  permission_handler:
+    dependency: "direct main"
+    description:
+      name: permission_handler
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0+hotfix.3"
+  permission_handler_platform_interface:
+    dependency: transitive
+    description:
+      name: permission_handler_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   petitparser:
     dependency: transitive
     description:
@@ -144,6 +207,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   pointycastle:
     dependency: transitive
     description:
@@ -158,6 +228,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.4"
   quiver:
     dependency: transitive
     description:
@@ -165,6 +242,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  rxdart:
+    dependency: "direct main"
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.23.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -235,4 +319,4 @@ packages:
     version: "3.5.0"
 sdks:
   dart: ">=2.7.0 <3.0.0"
-  flutter: ">=1.10.0"
+  flutter: ">=1.12.8 <2.0.0"

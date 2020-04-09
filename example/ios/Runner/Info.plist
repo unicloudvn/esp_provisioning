@@ -41,5 +41,19 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app want to use Bluetooth to provision your device</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This app want to use Bluetooth to provision your device</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app want to use Bluetooth to provision your device</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app want to use Bluetooth to provision your device</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app want to use Bluetooth to provision your device</string>
 </dict>
 </plist>

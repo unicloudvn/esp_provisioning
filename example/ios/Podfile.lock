@@ -6,11 +6,14 @@ PODS:
     - Flutter
     - MultiplatformBleAdapter (= 0.1.5)
   - MultiplatformBleAdapter (0.1.5)
+  - "permission_handler (5.0.0+hotfix.3)":
+    - Flutter
 
 DEPENDENCIES:
   - esp_provisioning (from `.symlinks/plugins/esp_provisioning/ios`)
   - Flutter (from `Flutter`)
   - flutter_ble_lib (from `.symlinks/plugins/flutter_ble_lib/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
 
 SPEC REPOS:
   trunk:
@@ -23,12 +26,15 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_ble_lib:
     :path: ".symlinks/plugins/flutter_ble_lib/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
 
 SPEC CHECKSUMS:
-  esp_provisioning: 60513083ac5ba5e2e76de7c3bc92707cc069e8ff
+  esp_provisioning: f23d52f966f1de0f66007d805220abb52f61a2f1
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_ble_lib: 20e79f0b1d78d921d9ed68ab4451e190029bc3d9
   MultiplatformBleAdapter: 3c4391d428382738a47662ae1f665a29ce78ff39
+  permission_handler: 4a985b5448897c27fdeadde84f7452520c0e6c58
 
 PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
 
