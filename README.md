@@ -1,10 +1,10 @@
 # esp_provisioning
 
-![Made with love in Vietnam](https://madewithlove.now.sh/vn?heart=true)
+![Made with love in Vietnam](https://madewithlove.now.sh/vn?heart=true) ![Pub Version](https://img.shields.io/pub/v/esp_provisioning)
 
 Espressif BLE Provisioning library for ESP32
 
-![](./img.gif)
+![](https://github.com/sunshine-tech/esp_provisioning/blob/master/img.gif?raw=true)
 
 A library for Flutter was developed to provide network credentials and/or custom data to an ESP32 over Bluetooth BLE.
 The company makes chips ESP32, Espresif, they have 2 libraries for each Platform iOS and Android
