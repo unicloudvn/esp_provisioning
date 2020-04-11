@@ -1,6 +1,6 @@
 name: esp_provisioning
 description: Espressif BLE Provisioning library
-version: 1.0.0+2
+version: 1.0.0+3
 author: TuanPM <tuanpm@live.com>
 homepage: https://github.com/sunshine-tech/esp_provisioning.git
 

@@ -178,4 +178,16 @@ class EspProv {
     var respPayload = WiFiConfigPayload.fromBuffer(respRaw);
     return (respPayload.respApplyConfig.status == Status.Success);
   }
+
+  Future<Uint8List> sendReceiveCustomData(Uint8List data, {int packageSize = 256}) async {
+    var i = data.length;
+    var offset = 0;
+    Uint8List ret;
+    while (i > 0) {
+      var needToSend = data.sublist(offset, i < packageSize ? i : packageSize);
+      ret += await transport.sendReceive('custom-data', needToSend);
+      i -= packageSize;
+    }
+    return ret;
+  }
 }
