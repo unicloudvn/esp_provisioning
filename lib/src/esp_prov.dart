@@ -182,12 +182,18 @@ class EspProv {
   Future<Uint8List> sendReceiveCustomData(Uint8List data, {int packageSize = 256}) async {
     var i = data.length;
     var offset = 0;
-    Uint8List ret;
+    List<int> ret = new List<int>(0);
     while (i > 0) {
       var needToSend = data.sublist(offset, i < packageSize ? i : packageSize);
-      ret += await transport.sendReceive('custom-data', needToSend);
+      var encrypted = await security.encrypt(needToSend);
+      var newData = await transport.sendReceive('custom-data', encrypted);
+
+      if (newData.length > 0) {
+        var decrypted = await security.decrypt(newData);
+        ret += List.from(decrypted);
+      }
       i -= packageSize;
     }
-    return ret;
+    return Uint8List.fromList(ret);
   }
 }

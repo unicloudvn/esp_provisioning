@@ -17,9 +17,6 @@
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/esp_provisioning/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/esp_provisioning/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/esp_provisioning/example/build" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/esp_provisioning/example/build/ios/Debug-iphoneos/Runner.app/Frameworks/App.framework/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/esp_provisioning/example/build/ios/iphoneos/Runner.app/Frameworks/App.framework/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/esp_provisioning/example/ios/Flutter/App.framework/flutter_assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Flutter/App.framework/flutter_assets/packages" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
