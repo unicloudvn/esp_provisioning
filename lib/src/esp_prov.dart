@@ -24,11 +24,10 @@ class EspProv {
         if (request == null) {
           return true;
         }
-
         var response = await transport.sendReceive(
             'prov-session', request.writeToBuffer());
         if (response.isEmpty) {
-          return false;
+          throw Exception('Empty response');
         }
         responseData = SessionData.fromBuffer(response);
       }
