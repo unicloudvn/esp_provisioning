@@ -14,10 +14,10 @@ class ConnectionStatus {
   ConnectionStatus({
     this.state,
     this.ip,
-    this.failMessage,
+    this.failedReason,
   });
 
   final WifiConnectionState state;
   final String ip;
-  final WifiConnectFailedReason failMessage;
+  final WifiConnectFailedReason failedReason;
 }

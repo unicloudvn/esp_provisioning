@@ -205,12 +205,12 @@ class EspProv {
       if(respPayload.respGetStatus.failReason.value == 0) {
         return ConnectionStatus(
           state: WifiConnectionState.ConnectionFailed,
-          failMessage: WifiConnectFailedReason.AuthError,
+          failedReason: WifiConnectFailedReason.AuthError,
         );
       } else if(respPayload.respGetStatus.failReason.value == 1) {
         return ConnectionStatus(
           state: WifiConnectionState.ConnectionFailed,
-          failMessage: WifiConnectFailedReason.NetworkNotFound,
+          failedReason: WifiConnectFailedReason.NetworkNotFound,
         );
       }
       return ConnectionStatus(state: WifiConnectionState.ConnectionFailed);
