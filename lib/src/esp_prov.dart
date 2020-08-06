@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:esp_provisioning/src/connection_models.dart';
+
 import 'proto/dart/constants.pbenum.dart';
 import 'proto/dart/wifi_config.pb.dart';
 import 'proto/dart/wifi_scan.pb.dart';
@@ -178,7 +180,7 @@ class EspProv {
     return (respPayload.respApplyConfig.status == Status.Success);
   }
 
-  Future<RespGetStatus> getStatus() async {
+  Future<ConnectionStatus> getStatus() async {
     var payload = WiFiConfigPayload();
     payload.msg = WiFiConfigMsgType.TypeCmdGetStatus;
 
@@ -190,7 +192,31 @@ class EspProv {
     var respRaw = await security.decrypt(respData);
     var respPayload = WiFiConfigPayload.fromBuffer(respRaw);
 
-    return respPayload.respGetStatus;
+    if(respPayload.respGetStatus.staState.value == 0) {
+      return ConnectionStatus(
+        state: WifiConnectionState.Connected,
+        ip: respPayload.respGetStatus.connected.ip4Addr
+      );
+    } else if(respPayload.respGetStatus.staState.value == 1) {
+      return ConnectionStatus(state: WifiConnectionState.Connecting);
+    } else if(respPayload.respGetStatus.staState.value == 2) {
+      return ConnectionStatus(state: WifiConnectionState.Disconnected);
+    } else if(respPayload.respGetStatus.staState.value == 3) {
+      if(respPayload.respGetStatus.failReason.value == 0) {
+        return ConnectionStatus(
+          state: WifiConnectionState.ConnectionFailed,
+          failMessage: WifiConnectFailedReason.AuthError,
+        );
+      } else if(respPayload.respGetStatus.failReason.value == 1) {
+        return ConnectionStatus(
+          state: WifiConnectionState.ConnectionFailed,
+          failMessage: WifiConnectFailedReason.NetworkNotFound,
+        );
+      }
+      return ConnectionStatus(state: WifiConnectionState.ConnectionFailed);
+    }
+
+    return null;
   }
 
   Future<Uint8List> sendReceiveCustomData(Uint8List data, {int packageSize = 256}) async {
