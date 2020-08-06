@@ -178,7 +178,7 @@ class EspProv {
     return (respPayload.respApplyConfig.status == Status.Success);
   }
 
-  Future<String> sendReceiveStatus() async {
+  Future<RespGetStatus> getStatus() async {
     var payload = WiFiConfigPayload();
     payload.msg = WiFiConfigMsgType.TypeCmdGetStatus;
 
@@ -190,22 +190,7 @@ class EspProv {
     var respRaw = await security.decrypt(respData);
     var respPayload = WiFiConfigPayload.fromBuffer(respRaw);
 
-    if(respPayload.respGetStatus.staState.value == 0) {
-      return "connected";
-    } else if(respPayload.respGetStatus.staState.value == 1) {
-      return "connecting";
-    } else if(respPayload.respGetStatus.staState.value == 2) {
-      return "disconnected";
-    } else if(respPayload.respGetStatus.staState.value == 3) {
-      if(respPayload.respGetStatus.failReason.value == 0) {
-        return "incorrect password";
-      } else if(respPayload.respGetStatus.failReason.value == 1) {
-        return "incorrect ssid";
-      }
-      return "failed";
-    }
-
-    return "unknown";
+    return respPayload.respGetStatus;
   }
 
   Future<Uint8List> sendReceiveCustomData(Uint8List data, {int packageSize = 256}) async {
