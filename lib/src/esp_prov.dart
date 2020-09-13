@@ -4,11 +4,10 @@ import 'dart:typed_data';
 import 'package:esp_provisioning/src/connection_models.dart';
 
 import 'proto/dart/constants.pbenum.dart';
+import 'proto/dart/session.pb.dart';
 import 'proto/dart/wifi_config.pb.dart';
 import 'proto/dart/wifi_scan.pb.dart';
-import 'proto/dart/session.pb.dart';
 import 'security.dart';
-
 import 'transport.dart';
 
 class EspProv {
@@ -43,7 +42,7 @@ class EspProv {
     return transport.disconnect();
   }
 
-  Future<List<Map<String, dynamic>>> startScanWiFi() async {
+  Future<List<WifiAP>> startScanWiFi() async {
     return await scan();
   }
 
@@ -90,7 +89,7 @@ class EspProv {
     return scanStatusResponse(respData);
   }
 
-  Future<List<Map<String, dynamic>>> scanResultRequest(
+  Future<List<WifiAP>> scanResultRequest(
       {int startIndex = 0, int count = 0}) async {
     WiFiScanPayload payload = WiFiScanPayload();
     payload.msg = WiFiScanMsgType.TypeCmdScanResult;
@@ -105,25 +104,22 @@ class EspProv {
     return scanResultResponse(respData);
   }
 
-  Future<List<Map<String, dynamic>>> scanResultResponse(Uint8List data) async {
+  Future<List<WifiAP>> scanResultResponse(Uint8List data) async {
     var respPayload = WiFiScanPayload.fromBuffer(await security.decrypt(data));
     if (respPayload.msg != WiFiScanMsgType.TypeRespScanResult) {
       throw Exception('Invalid expected message type $respPayload');
     }
-    List<Map<String, dynamic>> ret = new List<Map<String, dynamic>>();
+    List<WifiAP> ret = [];
     for (var entry in respPayload.respScanResult.entries) {
-      ret.add({
-        'ssid': utf8.decode(entry.ssid),
-        'channel': entry.channel,
-        'rssi': entry.rssi,
-        'bssid': entry.bssid,
-        'auth': entry.auth.toString(),
-      });
+      ret.add(WifiAP(
+          ssid: utf8.decode(entry.ssid),
+          rssi: entry.rssi,
+          private: entry.auth.toString() != 'Open'));
     }
     return ret;
   }
 
-  Future<List<Map<String, dynamic>>> scan(
+  Future<List<WifiAP>> scan(
       {bool blocking = true,
       bool passive = false,
       int groupChannels = 5,
@@ -136,7 +132,7 @@ class EspProv {
           periodMs: periodMs);
       var status = await scanStatusRequest();
       var resultCount = status.respScanStatus.resultCount;
-      List<Map<String, dynamic>> ret = new List<Map<String, dynamic>>();
+      List<WifiAP> ret = [];
       if (resultCount > 0) {
         var index = 0;
         var remaining = resultCount;
@@ -192,22 +188,21 @@ class EspProv {
     var respRaw = await security.decrypt(respData);
     var respPayload = WiFiConfigPayload.fromBuffer(respRaw);
 
-    if(respPayload.respGetStatus.staState.value == 0) {
+    if (respPayload.respGetStatus.staState.value == 0) {
       return ConnectionStatus(
-        state: WifiConnectionState.Connected,
-        ip: respPayload.respGetStatus.connected.ip4Addr
-      );
-    } else if(respPayload.respGetStatus.staState.value == 1) {
+          state: WifiConnectionState.Connected,
+          ip: respPayload.respGetStatus.connected.ip4Addr);
+    } else if (respPayload.respGetStatus.staState.value == 1) {
       return ConnectionStatus(state: WifiConnectionState.Connecting);
-    } else if(respPayload.respGetStatus.staState.value == 2) {
+    } else if (respPayload.respGetStatus.staState.value == 2) {
       return ConnectionStatus(state: WifiConnectionState.Disconnected);
-    } else if(respPayload.respGetStatus.staState.value == 3) {
-      if(respPayload.respGetStatus.failReason.value == 0) {
+    } else if (respPayload.respGetStatus.staState.value == 3) {
+      if (respPayload.respGetStatus.failReason.value == 0) {
         return ConnectionStatus(
           state: WifiConnectionState.ConnectionFailed,
           failedReason: WifiConnectFailedReason.AuthError,
         );
-      } else if(respPayload.respGetStatus.failReason.value == 1) {
+      } else if (respPayload.respGetStatus.failReason.value == 1) {
         return ConnectionStatus(
           state: WifiConnectionState.ConnectionFailed,
           failedReason: WifiConnectFailedReason.NetworkNotFound,
@@ -219,7 +214,8 @@ class EspProv {
     return null;
   }
 
-  Future<Uint8List> sendReceiveCustomData(Uint8List data, {int packageSize = 256}) async {
+  Future<Uint8List> sendReceiveCustomData(Uint8List data,
+      {int packageSize = 256}) async {
     var i = data.length;
     var offset = 0;
     List<int> ret = new List<int>(0);
