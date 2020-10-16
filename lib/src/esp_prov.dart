@@ -146,7 +146,7 @@ class EspProv {
       }
       return ret;
     } catch (e) {
-      print('Error scan wifi $e');
+      throw Exception('Error scan wifi $e');
     }
     return null;
   }
