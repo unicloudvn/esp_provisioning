@@ -17,24 +17,19 @@ class EspProv {
   EspProv({this.transport, this.security});
 
   Future<bool> establishSession() async {
-    try {
-      SessionData responseData;
-      await transport.connect();
-      while (true) {
-        var request = await security.securitySession(responseData);
-        if (request == null) {
-          return true;
-        }
-        var response = await transport.sendReceive(
-            'prov-session', request.writeToBuffer());
-        if (response.isEmpty) {
-          throw Exception('Empty response');
-        }
-        responseData = SessionData.fromBuffer(response);
+    SessionData responseData;
+    await transport.connect();
+    while (true) {
+      var request = await security.securitySession(responseData);
+      if (request == null) {
+        return true;
       }
-    } catch (e) {
-      print('EstablishSession error $e');
-      return false;
+      var response =
+          await transport.sendReceive('prov-session', request.writeToBuffer());
+      if (response.isEmpty) {
+        throw Exception('Empty response');
+      }
+      responseData = SessionData.fromBuffer(response);
     }
   }
 
@@ -124,31 +119,26 @@ class EspProv {
       bool passive = false,
       int groupChannels = 5,
       int periodMs = 0}) async {
-    try {
-      await startScanRequest(
-          blocking: blocking,
-          passive: passive,
-          groupChannels: groupChannels,
-          periodMs: periodMs);
-      var status = await scanStatusRequest();
-      var resultCount = status.respScanStatus.resultCount;
-      List<WifiAP> ret = [];
-      if (resultCount > 0) {
-        var index = 0;
-        var remaining = resultCount;
-        while (remaining > 0) {
-          var count = remaining > 4 ? 4 : remaining;
-          var data = await scanResultRequest(startIndex: index, count: count);
-          ret.addAll(data);
-          remaining -= count;
-          index += count;
-        }
+    await startScanRequest(
+        blocking: blocking,
+        passive: passive,
+        groupChannels: groupChannels,
+        periodMs: periodMs);
+    var status = await scanStatusRequest();
+    var resultCount = status.respScanStatus.resultCount;
+    List<WifiAP> ret = [];
+    if (resultCount > 0) {
+      var index = 0;
+      var remaining = resultCount;
+      while (remaining > 0) {
+        var count = remaining > 4 ? 4 : remaining;
+        var data = await scanResultRequest(startIndex: index, count: count);
+        ret.addAll(data);
+        remaining -= count;
+        index += count;
       }
-      return ret;
-    } catch (e) {
-      throw Exception('Error scan wifi $e');
     }
-    return null;
+    return ret;
   }
 
   Future<bool> sendWifiConfig({String ssid, String password}) async {
