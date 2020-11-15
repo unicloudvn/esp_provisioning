@@ -16,13 +16,13 @@ class EspProv {
 
   EspProv({this.transport, this.security});
 
-  Future<bool> establishSession() async {
+  Future<void> establishSession() async {
     SessionData responseData;
     await transport.connect();
     while (true) {
       var request = await security.securitySession(responseData);
       if (request == null) {
-        return true;
+        return;
       }
       var response =
           await transport.sendReceive('prov-session', request.writeToBuffer());
