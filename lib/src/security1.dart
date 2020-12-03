@@ -39,7 +39,7 @@ class Security1 implements ProvSecurity {
   }
 
   Future<void> _generateKey() async {
-    clientKey = await x25519.keyPairGenerator.generate();
+    clientKey = await x25519.newKeyPair();
   }
 
   Uint8List _xor(Uint8List a, Uint8List b) {
@@ -106,7 +106,8 @@ class Security1 implements ProvSecurity {
     if (pop != null) {
       var sink = sha256.newSink();
       sink.add(utf8.encode(pop));
-      final hash = await sink.close();
+      sink.close();
+      final hash = sink.hash;
       sharedK = _xor(sharedK, hash.bytes);
       _verbose(
           'setup0Response: pop: $pop, hash: ${hash.bytes.toString()} sharedK: ${sharedK.toString()}');

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
-import 'package:logger/logger.dart';
 import 'package:esp_provisioning/esp_provisioning.dart';
+import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
@@ -100,10 +100,7 @@ class BleService {
     await _bleManager.stopPeripheralScan();
     EspProv prov = EspProv(
         transport: TransportBLE(p), security: Security1(pop: pop));
-    var success = await prov.establishSession();
-    if (!success) {
-      throw Exception('Error establishSession');
-    }
+    await prov.establishSession();
     return prov;
   }
 

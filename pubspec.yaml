@@ -1,18 +1,18 @@
 name: esp_provisioning
 description: Espressif BLE Provisioning library
 version: 1.0.0+5
-author: TuanPM <tuanpm@live.com>
 homepage: https://github.com/sunshine-tech/esp_provisioning.git
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
   flutter: ">=1.10.0"
 
 dependencies:
   flutter:
     sdk: flutter
   protobuf: ^1.0.1
-  cryptography: ^0.2.6
+  cryptography: ^1.4.1
+  collection: ^1.14.13
   flutter_ble_lib: ^2.2.5
 
 
