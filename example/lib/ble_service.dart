@@ -50,12 +50,13 @@ class BleService {
           });
         });
 
-    if (Platform.isAndroid) {
-      log.v('enableRadio');
-      await _bleManager.enableRadio();
-    }
-
     var state = await _waitForBluetoothPoweredOn();
+    if (Platform.isAndroid) {
+      if (state.index != 3) { // check if bluetooth is already open
+        log.v('enableRadio');
+        await _bleManager.enableRadio();
+      }
+    }
     _isPowerOn = true;
     return state;
   }
