@@ -18,6 +18,7 @@ class WifiBloc extends Bloc<WifiEvent, WifiState> {
     WifiEvent event,
   ) async* {
     if (event is WifiEventLoad) {
+      bleService.select(event.selectedDevice['peripheral']);
       yield* _mapLoadToState();
     } else if (event is WifiEventStartProvisioning) {
       yield* _mapProvisioningToState(event);

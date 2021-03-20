@@ -7,7 +7,14 @@ abstract class WifiEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class WifiEventLoad extends WifiEvent {}
+class WifiEventLoad extends WifiEvent {
+  final Map<String, dynamic> selectedDevice;
+
+  const WifiEventLoad(this.selectedDevice);
+
+  @override
+  List<Object> get props => [selectedDevice];
+}
 
 class WifiEventConnecting extends WifiEvent {}
 

@@ -7,8 +7,8 @@ import 'wifi.dart';
 import 'wifi_dialog.dart';
 
 class WiFiScreen extends StatefulWidget {
-  WiFiScreen({Key key}) : super(key: key);
-
+  Map<String, dynamic> peripheral;
+  WiFiScreen({Key key, this.peripheral}) : super(key: key);
   @override
   _WiFiScreenState createState() => _WiFiScreenState();
 }
@@ -114,7 +114,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
         ),
       ),
       body: BlocProvider(
-        create: (BuildContext context) => WifiBloc()..add(WifiEventLoad()),
+        create: (BuildContext context) => WifiBloc()..add(WifiEventLoad(widget.peripheral)),
         child: BlocBuilder<WifiBloc, WifiState>(
           builder: (BuildContext context, WifiState state) {
             if (state is WifiStateConnecting) {
