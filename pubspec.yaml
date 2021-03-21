@@ -2,6 +2,7 @@ name: esp_provisioning
 description: Espressif Provisioning library
 version: 1.0.0+6
 homepage: https://github.com/sunshine-tech/esp_provisioning.git
+author: Tuan PM <tuanpm@live.com>
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
