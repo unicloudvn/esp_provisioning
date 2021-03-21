@@ -10,8 +10,7 @@ class BleBloc extends Bloc<BleEvent, BleState> {
   StreamSubscription<ScanResult> _scanSubscription;
   List<Map<String, dynamic>> bleDevices = new List<Map<String, dynamic>>();
 
-  @override
-  BleState get initialState => BleStateLoading();
+  BleBloc(BleState initialState) : super(initialState);
 
   @override
   Stream<BleState> mapEventToState(

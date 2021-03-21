@@ -114,7 +114,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
         ),
       ),
       body: BlocProvider(
-        create: (BuildContext context) => WifiBloc()..add(WifiEventLoad()),
+        create: (BuildContext context) => WifiBloc(WifiStateLoading())..add(WifiEventLoad()),
         child: BlocBuilder<WifiBloc, WifiState>(
           builder: (BuildContext context, WifiState state) {
             if (state is WifiStateConnecting) {

@@ -50,7 +50,7 @@ class _BleScreenState extends State<BleScreen> {
         title: const Text('Scanning BLE devices'),
       ),
       body: BlocProvider(
-        create: (BuildContext context) => BleBloc()..add(BleEventStart()),
+        create: (BuildContext context) => BleBloc(BleStateLoading())..add(BleEventStart()),
         child: BlocBuilder<BleBloc, BleState>(
           builder: (BuildContext context, BleState state) {
             if (state is BleStatePermissionDenied) {

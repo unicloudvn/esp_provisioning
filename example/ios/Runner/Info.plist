@@ -53,6 +53,10 @@
 	<string>This app want to use Bluetooth to provision your device</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app want to use Bluetooth to provision your device</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app want to use Bluetooth to provision your device</string>
 </dict>

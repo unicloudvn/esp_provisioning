@@ -10,8 +10,7 @@ class WifiBloc extends Bloc<WifiEvent, WifiState> {
   EspProv prov;
   Logger log = Logger(printer: PrettyPrinter());
 
-  @override
-  WifiState get initialState => WifiStateLoading();
+  WifiBloc(WifiState initialState) : super(initialState);
 
   @override
   Stream<WifiState> mapEventToState(

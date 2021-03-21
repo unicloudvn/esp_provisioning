@@ -2,11 +2,11 @@ PODS:
   - esp_provisioning (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_ble_lib (2.2.3):
+  - flutter_ble_lib (2.3.2):
     - Flutter
-    - MultiplatformBleAdapter (= 0.1.5)
-  - MultiplatformBleAdapter (0.1.5)
-  - "permission_handler (5.0.0+hotfix.3)":
+    - MultiplatformBleAdapter (~> 0.1.8)
+  - MultiplatformBleAdapter (0.1.8)
+  - "permission_handler (5.1.0+2)":
     - Flutter
 
 DEPENDENCIES:
@@ -31,11 +31,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   esp_provisioning: f23d52f966f1de0f66007d805220abb52f61a2f1
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_ble_lib: 20e79f0b1d78d921d9ed68ab4451e190029bc3d9
-  MultiplatformBleAdapter: 3c4391d428382738a47662ae1f665a29ce78ff39
-  permission_handler: 4a985b5448897c27fdeadde84f7452520c0e6c58
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_ble_lib: 675f6ceaa6cd6a675bba408b705042458a782101
+  MultiplatformBleAdapter: bdfdd698ea5d816f0f389eda13d5b07a1bc74b59
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
 
-PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.9.0.beta.2
+COCOAPODS: 1.10.1
