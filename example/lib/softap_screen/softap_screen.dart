@@ -24,9 +24,43 @@ class _SoftApScreenState extends State<SoftApScreen> {
           builder: (BuildContext context, SoftApState state) {
             if (state is SoftApStateLoaded) {
               return Center(
-                child: Text('Please connect WiFi to Subol_Gas_Sensor_*** device in "Wi-Fi Settings"'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(4.0),
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child:Text('Please connect WiFi to Subol_Gas_Sensor_ in "Wi-Fi Settings". Once you complete it please click Ready button.',
+                      style: TextStyle(fontSize: 18),),
+                    ),
+
+                    SizedBox(height: MediaQuery.of(context).size.width * 0.1,),
+                    MaterialButton(
+                      color: Colors.redAccent,
+                      elevation: 5,
+                      padding: EdgeInsets.all(15.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => SoftApScreen()));
+                      },
+                      child: Text(
+                        'Ready',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                )
+
               );
             }
+
             return Center(
               child: SpinKitRipple(color: Theme.of(context).textSelectionColor),
             );
