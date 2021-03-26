@@ -7,35 +7,71 @@ abstract class WifiEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class WifiEventLoad extends WifiEvent {
+// events for BLE provisioning
+class WifiEventLoadBLE extends WifiEvent {
   final Map<String, dynamic> selectedDevice;
 
-  const WifiEventLoad(this.selectedDevice);
+  const WifiEventLoadBLE(this.selectedDevice);
 
   @override
   List<Object> get props => [selectedDevice];
 }
 
-class WifiEventConnecting extends WifiEvent {}
+class WifiEventConnectingBLE extends WifiEvent {}
 
-class WifiEventScanning extends WifiEvent {}
+class WifiEventScanningBLE extends WifiEvent {}
 
-class WifiEventScanned extends WifiEvent {}
+class WifiEventScannedBLE extends WifiEvent {}
 
-class WifiEventLoaded extends WifiEvent {
+class WifiEventLoadedBLE extends WifiEvent {
   final String wifiName;
 
-  WifiEventLoaded({this.wifiName});
+  WifiEventLoadedBLE({this.wifiName});
 
   @override
   List<Object> get props => [wifiName];
 }
 
-class WifiEventStartProvisioning extends WifiEvent {
+class WifiEventStartProvisioningBLE extends WifiEvent {
   final String ssid;
   final String password;
 
-  WifiEventStartProvisioning({this.ssid, this.password});
+  WifiEventStartProvisioningBLE({this.ssid, this.password});
+
+  @override
+  List<Object> get props => [ssid, password];
+}
+
+// events for softap provisioning
+class WifiEventLoadSoftAP extends WifiEvent {
+  final Map<String, dynamic> selectedDevice;
+
+  const WifiEventLoadSoftAP(this.selectedDevice);
+
+  @override
+  List<Object> get props => [selectedDevice];
+}
+
+class WifiEventConnectingSoftAP extends WifiEvent {}
+
+class WifiEventScanningSoftAP extends WifiEvent {}
+
+class WifiEventScannedSoftAP extends WifiEvent {}
+
+class WifiEventLoadedSoftAP extends WifiEvent {
+  final String wifiName;
+
+  WifiEventLoadedSoftAP({this.wifiName});
+
+  @override
+  List<Object> get props => [wifiName];
+}
+
+class WifiEventStartProvisioningSoftAP extends WifiEvent {
+  final String ssid;
+  final String password;
+
+  WifiEventStartProvisioningSoftAP({this.ssid, this.password});
 
   @override
   List<Object> get props => [ssid, password];
