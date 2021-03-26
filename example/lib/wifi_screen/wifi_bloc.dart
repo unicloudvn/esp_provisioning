@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:esp_provisioning/esp_provisioning.dart';
 import 'package:logger/logger.dart';
 import '../ble_service.dart';
+import '../softap_service.dart';
 import './wifi.dart';
 
 class WifiBlocBLE extends Bloc<WifiEvent, WifiState> {
@@ -58,5 +59,41 @@ class WifiBlocBLE extends Bloc<WifiEvent, WifiState> {
   Future<void> close() {
     prov?.dispose();
     return super.close();
+  }
+}
+
+class WiFiBlocSoftAP extends Bloc<WifiEvent, WifiState> {
+  var softApService = SoftAPService("192.168.4.1", 80);
+  EspProv prov;
+  Logger log = Logger(printer: PrettyPrinter());
+
+  @override
+  // TODO: implement initialState
+  WifiState get initialState => WifiStateLoading();
+
+  @override
+  Stream<WifiState> mapEventToState(WifiEvent event) async* {
+    if (event is WifiEventLoadSoftAP) {
+      yield* _mapLoadToState();
+    }
+  }
+
+  Stream<WifiState> _mapLoadToState() async*{
+    yield WifiStateConnecting();
+    try {
+      prov = await softApService.startProvisioning();
+    } catch (e) {
+      log.e('Error conencting to device $e');
+      yield WifiStateError('Error conencting to device');
+    }
+    yield WifiStateScanning();
+    try {
+      var listWifi = await prov.startScanWiFi();
+      yield WifiStateLoaded(wifiList: listWifi ?? []);
+      log.v('Wifi $listWifi');
+    } catch (e) {
+      log.e('Error scan WiFi network $e');
+      yield WifiStateError('Error scan WiFi network');
+    }
   }
 }
