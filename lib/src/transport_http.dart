@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
@@ -37,6 +36,7 @@ class TransportHTTP implements ProvTransport{
     }
     catch(e){
       print('Connection error ' + e.toString());
+      return false;
     }
 
   }
