@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 import '../ble_service.dart';
 import './wifi.dart';
 
-class WifiBloc extends Bloc<WifiEvent, WifiState> {
+class WifiBlocBLE extends Bloc<WifiEvent, WifiState> {
   var bleService = BleService.getInstance();
   EspProv prov;
   Logger log = Logger(printer: PrettyPrinter());
@@ -17,10 +17,10 @@ class WifiBloc extends Bloc<WifiEvent, WifiState> {
   Stream<WifiState> mapEventToState(
     WifiEvent event,
   ) async* {
-    if (event is WifiEventLoad) {
+    if (event is WifiEventLoadBLE) {
       bleService.select(event.selectedDevice['peripheral']);
       yield* _mapLoadToState();
-    } else if (event is WifiEventStartProvisioning) {
+    } else if (event is WifiEventStartProvisioningBLE) {
       yield* _mapProvisioningToState(event);
     }
   }
@@ -46,7 +46,7 @@ class WifiBloc extends Bloc<WifiEvent, WifiState> {
   }
 
   Stream<WifiState> _mapProvisioningToState(
-      WifiEventStartProvisioning event) async* {
+      WifiEventStartProvisioningBLE event) async* {
     yield WifiStateProvisioning();
     await prov?.sendWifiConfig(ssid: event.ssid, password: event.password);
     await prov?.applyWifiConfig();

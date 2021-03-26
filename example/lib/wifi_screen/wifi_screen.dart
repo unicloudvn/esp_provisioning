@@ -22,8 +22,8 @@ class _WiFiScreenState extends State<WiFiScreen> {
             wifiName: wifi['ssid'],
             onSubmit: (ssid, password) {
               print('ssid =$ssid, password = $password');
-              BlocProvider.of<WifiBloc>(_context).add(
-                  WifiEventStartProvisioning(ssid: ssid, password: password));
+              BlocProvider.of<WifiBlocBLE>(_context).add(
+                  WifiEventStartProvisioningBLE(ssid: ssid, password: password));
             },
           );
         });
@@ -114,8 +114,8 @@ class _WiFiScreenState extends State<WiFiScreen> {
         ),
       ),
       body: BlocProvider(
-        create: (BuildContext context) => WifiBloc()..add(WifiEventLoad(widget.peripheral)),
-        child: BlocBuilder<WifiBloc, WifiState>(
+        create: (BuildContext context) => WifiBlocBLE()..add(WifiEventLoadBLE(widget.peripheral)),
+        child: BlocBuilder<WifiBlocBLE, WifiState>(
           builder: (BuildContext context, WifiState state) {
             if (state is WifiStateConnecting) {
               return _buildStepper(0, state);
