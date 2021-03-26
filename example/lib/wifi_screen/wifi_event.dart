@@ -43,14 +43,7 @@ class WifiEventStartProvisioningBLE extends WifiEvent {
 }
 
 // events for softap provisioning
-class WifiEventLoadSoftAP extends WifiEvent {
-  final Map<String, dynamic> selectedDevice;
-
-  const WifiEventLoadSoftAP(this.selectedDevice);
-
-  @override
-  List<Object> get props => [selectedDevice];
-}
+class WifiEventLoadSoftAP extends WifiEvent {}
 
 class WifiEventConnectingSoftAP extends WifiEvent {}
 
