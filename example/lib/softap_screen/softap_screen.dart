@@ -1,6 +1,7 @@
 import 'package:esp_provisioning_example/softap_screen/softap_bloc.dart';
 import 'package:esp_provisioning_example/softap_screen/softap_event.dart';
 import 'package:esp_provisioning_example/softap_screen/softap_state.dart';
+import 'package:esp_provisioning_example/wifi_screen/wifi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -11,6 +12,34 @@ class SoftApScreen extends StatefulWidget {
 }
 
 class _SoftApScreenState extends State<SoftApScreen> {
+
+  void _showBottomSheet(BuildContext _context) {
+  //  BlocProvider.of<SoftApBloc>(_context).add(SoftApEventStart());
+
+    var bottomSheetController = showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.white,
+        isScrollControlled: true,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(20.0),
+            topRight: const Radius.circular(20.0),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return Container(
+            padding: EdgeInsets.only(top: 5.0),
+            height: MediaQuery.of(context).size.height - 50,
+            child: WiFiScreenSoftAP(),
+          );
+        });
+    bottomSheetController.whenComplete(() {
+      // after prov.
+      BlocProvider.of<SoftApBloc>(_context).add(SoftApEventStart());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +59,7 @@ class _SoftApScreenState extends State<SoftApScreen> {
                     Container(
                       padding: EdgeInsets.all(4.0),
                       width: MediaQuery.of(context).size.width * 0.85,
-                      child:Text('Please connect WiFi to Subol_Gas_Sensor_ in "Wi-Fi Settings". Once you complete it please click Ready button.',
+                      child:Text('Please connect WiFi to Subol_Gas_Sensor_ in "Wi-Fi Settings". Once you complete it please tap on "Ready" button.',
                       style: TextStyle(fontSize: 18),),
                     ),
 
@@ -41,12 +70,6 @@ class _SoftApScreenState extends State<SoftApScreen> {
                       padding: EdgeInsets.all(15.0),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5))),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => SoftApScreen()));
-                      },
                       child: Text(
                         'Ready',
                         style: Theme.of(context)
@@ -54,6 +77,10 @@ class _SoftApScreenState extends State<SoftApScreen> {
                             .headline6
                             .copyWith(color: Colors.white),
                       ),
+
+                      onPressed: () {
+                        _showBottomSheet(this.context);
+                      },
                     ),
                   ],
                 )

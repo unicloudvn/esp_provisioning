@@ -10,7 +10,7 @@ class SoftAPService {
 
   Future<EspProv> startProvisioning() async {
     EspProv prov = EspProv(
-        transport: TransportHTTP(this.hostname, this.port));
+        transport: TransportHTTP(this.hostname, this.port), security: Security1(pop: 'abcd1234'));
     var success = await prov.establishSession();
     if (!success) {
       throw Exception('Error establishSession');

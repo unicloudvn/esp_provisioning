@@ -6,3 +6,5 @@ abstract class SoftApEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class SoftApEventStart extends SoftApEvent {}

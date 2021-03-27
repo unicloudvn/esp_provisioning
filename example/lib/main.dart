@@ -1,3 +1,4 @@
+import 'package:esp_provisioning_example/softap_screen/softap_screen.dart';
 import 'package:flutter/material.dart';
 import 'ble_screen/ble_screen.dart';
 
@@ -26,7 +27,7 @@ class HomeScreen extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => BleScreen()));
+                      builder: (BuildContext context) => SoftApScreen()));
             },
             child: Text(
               'Start Provisioning',

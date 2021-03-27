@@ -63,7 +63,7 @@ class WifiBlocBLE extends Bloc<WifiEvent, WifiState> {
 }
 
 class WiFiBlocSoftAP extends Bloc<WifiEvent, WifiState> {
-  var softApService = SoftAPService("192.168.4.1", 80);
+  var softApService = SoftAPService("192.168.4.1:80", 80);
   EspProv prov;
   Logger log = Logger(printer: PrettyPrinter());
 
@@ -83,8 +83,8 @@ class WiFiBlocSoftAP extends Bloc<WifiEvent, WifiState> {
     try {
       prov = await softApService.startProvisioning();
     } catch (e) {
-      log.e('Error conencting to device $e');
-      yield WifiStateError('Error conencting to device');
+      log.e('Error connecting to device $e');
+      yield WifiStateError('Error connecting to device');
     }
     yield WifiStateScanning();
     try {

@@ -34,7 +34,7 @@ class _BleScreenState extends State<BleScreen> {
           return Container(
             padding: EdgeInsets.only(top: 5.0),
             height: MediaQuery.of(context).size.height - 50,
-            child: WiFiScreen(peripheral: item),
+            child: WiFiScreenBLE(peripheral: item),
           );
         });
     bottomSheetController.whenComplete(() {
