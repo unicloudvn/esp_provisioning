@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:io';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:esp_provisioning/esp_provisioning.dart';
 import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:rxdart/rxdart.dart';
+import 'package:location/location.dart' as location;
+// import 'package:permission_handler/permission_handler.dart';
 
 class BleService {
   static BleService _instance;
@@ -123,6 +126,16 @@ class BleService {
   }
 
   Future<bool> requestBlePermissions() async {
+    location.Location _location = new location.Location();
+    bool _serviceEnabled;
+
+    _serviceEnabled = await _location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await _location.requestService();
+      if (!_serviceEnabled) {
+        return false;
+      }
+    }
     var isLocationGranted = await Permission.locationWhenInUse.request();
     log.v('checkBlePermissions, isLocationGranted=$isLocationGranted');
     return isLocationGranted == PermissionStatus.granted;
