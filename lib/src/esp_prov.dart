@@ -18,23 +18,28 @@ class EspProv {
 
   Future<void> establishSession() async {
     SessionData responseData;
-    await transport.connect();
-    while (true) {
-      var request = await security.securitySession(responseData);
-      if (request == null) {
-        return;
+
+    await transport.disconnect();
+
+    if(await transport.connect()){
+      while (await transport.checkConnect()) {
+        var request = await security.securitySession(responseData);
+        if (request == null) {
+          return;
+        }
+        var response =
+            await transport.sendReceive('prov-session', request.writeToBuffer());
+        if (response.isEmpty) {
+          throw Exception('Empty response');
+        }
+        responseData = SessionData.fromBuffer(response);
       }
-      var response =
-          await transport.sendReceive('prov-session', request.writeToBuffer());
-      if (response.isEmpty) {
-        throw Exception('Empty response');
-      }
-      responseData = SessionData.fromBuffer(response);
     }
+    return;
   }
 
   Future<void> dispose() async {
-    return transport.disconnect();
+    return await transport.disconnect();
   }
 
   Future<List<WifiAP>> startScanWiFi() async {
@@ -65,7 +70,7 @@ class EspProv {
     payload.cmdScanStart = scanStart;
     var reqData = await security.encrypt(payload.writeToBuffer());
     var respData = await transport.sendReceive('prov-scan', reqData);
-    return startScanResponse(respData);
+    return await startScanResponse(respData);
   }
 
   Future<WiFiScanPayload> scanStatusResponse(Uint8List data) async {
@@ -81,7 +86,7 @@ class EspProv {
     payload.msg = WiFiScanMsgType.TypeCmdScanStatus;
     var reqData = await security.encrypt(payload.writeToBuffer());
     var respData = await transport.sendReceive('prov-scan', reqData);
-    return scanStatusResponse(respData);
+    return await scanStatusResponse(respData);
   }
 
   Future<List<WifiAP>> scanResultRequest(
@@ -96,7 +101,7 @@ class EspProv {
     payload.cmdScanResult = cmdScanResult;
     var reqData = await security.encrypt(payload.writeToBuffer());
     var respData = await transport.sendReceive('prov-scan', reqData);
-    return scanResultResponse(respData);
+    return await scanResultResponse(respData);
   }
 
   Future<List<WifiAP>> scanResultResponse(Uint8List data) async {

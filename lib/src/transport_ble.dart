@@ -32,29 +32,39 @@ class TransportBLE implements ProvTransport {
   }
 
   Future<bool> connect() async {
-    var isConnected = await peripheral.isConnected();
+    bool isConnected = await peripheral.isConnected();
     if (isConnected) {
-      return true;
+      return Future.value(true);
     }
     await peripheral.connect(requestMtu: 512);
     await peripheral.discoverAllServicesAndCharacteristics(
         transactionId: 'discoverAllServicesAndCharacteristics');
-    return peripheral.isConnected();
+    return await peripheral.isConnected();
   }
 
   Future<Uint8List> sendReceive(String epName, Uint8List data) async {
-    if (data != null && data.length > 0) {
-      await peripheral.writeCharacteristic(
-          serviceUUID, nuLookup[epName], data, true);
+    if (data != null){ 
+      if( data.length > 0){
+        await peripheral.writeCharacteristic(serviceUUID, nuLookup[epName??""], data, true);
+      }
     }
     CharacteristicWithValue receivedData = await peripheral.readCharacteristic(
-        serviceUUID, nuLookup[epName],
+        serviceUUID, nuLookup[epName??""],
         transactionId: 'readCharacteristic');
     return receivedData.value;
   }
 
   Future<void> disconnect() async {
-    return await peripheral.disconnectOrCancelConnection();
+    bool check = await peripheral.isConnected();
+    if(check){  
+      return await peripheral.disconnectOrCancelConnection();
+    }else{
+      return;
+    }
+  }
+
+  Future<bool> checkConnect() async {
+    return await peripheral.isConnected();
   }
 
   void dispose() {
