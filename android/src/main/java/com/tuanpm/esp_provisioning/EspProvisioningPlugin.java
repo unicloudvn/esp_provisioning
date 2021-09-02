@@ -76,9 +76,6 @@ public class EspProvisioningPlugin implements FlutterPlugin, MethodCallHandler {
       if( check!=null){
         data = check;
       }
-      System.out.println("-------------");
-      System.out.println(data);
-      System.out.println("-------------");
       byte[] ret = cipher.update(data);
       result.success(ret);
     } else {
