@@ -44,7 +44,7 @@ class WifiBloc extends Bloc<WifiEvent, WifiState> {
         });
       });
 
-      yield WifiStateLoaded(mapListWifi);
+      yield WifiStateLoaded(wifiList: mapListWifi);
       log.v('Wifi $listWifi');
     } catch (e) {
       log.e('Error scan WiFi network $e');
