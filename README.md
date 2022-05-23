@@ -17,7 +17,7 @@ However, the mobile application development on Flutter is easier now, and many w
 ## Getting Started
 
 - Need [flutter_ble_lib](https://github.com/Polidea/FlutterBleLib) for BLE transport in your application
-- API (Check [exmaple](./exmaple))
+- API (Check [example](./example))
 
 ```dart
  EspProv prov = EspProv(
