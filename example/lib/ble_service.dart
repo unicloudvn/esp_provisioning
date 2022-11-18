@@ -55,18 +55,18 @@ class BleService {
 
     // if (Platform.isAndroid) {
     log.v('enableRadio');
-      // await _bleManager.enableRadio();
+    // await _bleManager.enableRadio();
     // }
 
     try {
       BluetoothState state = await _waitForBluetoothPoweredOn();
       _isPowerOn = state == BluetoothState.POWERED_ON;
-      if(!_isPowerOn){
+      if (!_isPowerOn) {
         if (Platform.isAndroid) {
           await _bleManager.enableRadio();
-          _isPowerOn=true;
+          _isPowerOn = true;
         }
-      } 
+      }
       return state;
     } catch (e) {
       log.e('Error ${e.toString()}');
@@ -76,7 +76,7 @@ class BleService {
 
   void select(Peripheral peripheral) async {
     bool _check = await selectedPeripheral?.isConnected();
-    if(_check == true){
+    if (_check == true) {
       await selectedPeripheral?.disconnectOrCancelConnection();
     }
     selectedPeripheral = peripheral;
@@ -91,7 +91,7 @@ class BleService {
     stopScanBle();
     await _stateSubscription?.cancel();
     bool _check = await selectedPeripheral?.isConnected();
-    if(_check == true){
+    if (_check == true) {
       await selectedPeripheral?.disconnectOrCancelConnection();
     }
 
@@ -114,15 +114,16 @@ class BleService {
     return _bleManager.stopPeripheralScan();
   }
 
-  Future<EspProv> startProvisioning({Peripheral peripheral, String pop = 'abcd1234'}) async {
+  Future<EspProv> startProvisioning(
+      {Peripheral peripheral, String pop = 'abcd1234'}) async {
     if (!_isPowerOn) {
       await _waitForBluetoothPoweredOn();
     }
     Peripheral p = peripheral ?? selectedPeripheral;
     log.v('peripheral $p');
     await _bleManager.stopPeripheralScan();
-    EspProv prov = EspProv(
-        transport: TransportBLE(p), security: Security1(pop: pop));
+    EspProv prov =
+        EspProv(transport: TransportBLE(p), security: Security1(pop: pop));
     await prov.establishSession();
     return prov;
   }
@@ -141,9 +142,8 @@ class BleService {
         completer.complete(bluetoothState);
       }
     });
-    return completer.future.timeout(Duration(seconds: 5),
-        onTimeout: () {});
-        // => throw Exception('Wait for Bluetooth PowerOn timeout'));
+    return completer.future.timeout(Duration(seconds: 5), onTimeout: () {});
+    // => throw Exception('Wait for Bluetooth PowerOn timeout'));
   }
 
   Future<bool> requestBlePermissions() async {

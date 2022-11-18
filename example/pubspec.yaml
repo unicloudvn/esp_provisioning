@@ -10,12 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  esp_provisioning:
-    path: ../
+  esp_provisioning: 1.0.0+6
   flutter_bloc: ^7.0.0
   logger: ^1.0.0
   permission_handler: ^7.0.0
-  equatable: ^2.0.0
+  equatable: ^2.0.5
   rxdart: ^0.26.0
   flutter_spinkit: ^5.0.0
   location: ^4.1.1

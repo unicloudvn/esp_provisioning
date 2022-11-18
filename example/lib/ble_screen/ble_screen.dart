@@ -14,7 +14,6 @@ class BleScreen extends StatefulWidget {
 }
 
 class _BleScreenState extends State<BleScreen> {
-
   void _showBottomSheet(Map<String, dynamic> item, BuildContext _context) {
     BlocProvider.of<BleBloc>(_context).add(BleEventStopScan());
     BlocProvider.of<BleBloc>(_context).add(BleEventSelect(item));
@@ -50,7 +49,8 @@ class _BleScreenState extends State<BleScreen> {
         title: const Text('Scanning BLE devices'),
       ),
       body: BlocProvider(
-        create: (BuildContext context) => BleBloc(BleStateLoading())..add(BleEventStart()),
+        create: (BuildContext context) =>
+            BleBloc(BleStateLoading())..add(BleEventStart()),
         child: BlocBuilder<BleBloc, BleState>(
           builder: (BuildContext context, BleState state) {
             if (state is BleStatePermissionDenied) {
@@ -66,7 +66,7 @@ class _BleScreenState extends State<BleScreen> {
             }
 
             return Center(
-              child: SpinKitRipple(color: Theme.of(context).textSelectionColor),
+              child: SpinKitRipple(color: Colors.blue),
             );
           },
         ),

@@ -48,8 +48,7 @@ class ScanList extends StatelessWidget {
                     height: 80,
                     child: Align(
                         alignment: Alignment.center,
-                        child: SpinKitRipple(
-                            color: Theme.of(_context).textSelectionColor)))),
+                        child: SpinKitRipple(color: Colors.blue)))),
         Expanded(
             child: ListView.separated(
                 shrinkWrap: true,
@@ -58,7 +57,7 @@ class ScanList extends StatelessWidget {
                   return _buildItem(context, items[index], icon, onTap: onTap);
                 },
                 separatorBuilder: (context, index) => Divider(
-                      color: Theme.of(context).dividerColor,
+                      color: Colors.blue,
                       height: 1.0,
                     )))
       ],

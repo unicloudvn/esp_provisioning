@@ -54,7 +54,7 @@ class _WifiDialogState extends State<WifiDialog> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(
-                              color: Theme.of(context).accentColor,
+                              color: Colors.blue,
                               width: 1,
                             )))),
                 SizedBox(
