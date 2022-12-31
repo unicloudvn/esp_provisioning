@@ -24,9 +24,11 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => BleScreen()));
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => Container(), //BleScreen(),
+                ),
+              );
             },
             child: Text(
               'Start Provisioning',

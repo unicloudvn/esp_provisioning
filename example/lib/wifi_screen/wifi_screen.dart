@@ -33,7 +33,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
     List<Widget> _statusWidget = [
       Column(
         children: <Widget>[
-          FlatButton.icon(
+          TextButton.icon(
               onPressed: () {},
               icon: SpinKitThreeBounce(
                 color: Colors.black,
@@ -44,7 +44,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
       ),
       Column(
         children: <Widget>[
-          FlatButton.icon(
+          TextButton.icon(
               onPressed: () {},
               icon: Icon(
                 Icons.check,
@@ -56,7 +56,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
                   color: Colors.green,
                 ),
               )),
-          FlatButton.icon(
+          TextButton.icon(
               onPressed: () {},
               icon: SpinKitThreeBounce(
                 color: Colors.black,
@@ -72,7 +72,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
       wifiList = Expanded(
           child: ScanList(state.wifiList, Icons.wifi, disableLoading: true,
               onTap: (Map<String, dynamic> item, BuildContext _context) {
-                _showDialog(item, _context);
+        _showDialog(item, _context);
       }));
     }
     var body = Expanded(child: Container());
@@ -80,8 +80,8 @@ class _WiFiScreenState extends State<WiFiScreen> {
     if (step < 2) {
       statusWidget = Expanded(child: _statusWidget[step]);
       body = Expanded(
-          child:
-              SpinKitDoubleBounce(color: Theme.of(context).textSelectionColor));
+          child: SpinKitDoubleBounce(
+              color: Theme.of(context).textSelectionTheme.selectionColor));
     } else {
       body = wifiList;
     }
@@ -114,7 +114,8 @@ class _WiFiScreenState extends State<WiFiScreen> {
         ),
       ),
       body: BlocProvider(
-        create: (BuildContext context) => WifiBloc(WifiStateLoading())..add(WifiEventLoad()),
+        create: (BuildContext context) =>
+            WifiBloc(WifiStateLoading())..add(WifiEventLoad()),
         child: BlocBuilder<WifiBloc, WifiState>(
           builder: (BuildContext context, WifiState state) {
             if (state is WifiStateConnecting) {
@@ -132,7 +133,8 @@ class _WiFiScreenState extends State<WiFiScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SpinKitThreeBounce(
-                      color: Theme.of(context).textSelectionColor,
+                      color:
+                          Theme.of(context).textSelectionTheme.selectionColor,
                       size: 20,
                     ),
                     Text('Provisioning',
@@ -144,16 +146,20 @@ class _WiFiScreenState extends State<WiFiScreen> {
             if (state is WifiStateProvisioned) {
               return Container(
                 child: Center(
-                  child: MaterialButton(child: Text('Done'), color: Colors.redAccent, onPressed: () {
-                    Navigator.of(context).pop();
-                  },),
+                  child: MaterialButton(
+                    child: Text('Done'),
+                    color: Colors.redAccent,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
               );
             }
             return Container(
               child: Center(
                 child: SpinKitThreeBounce(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                   size: 20,
                 ),
               ),

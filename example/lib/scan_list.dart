@@ -49,7 +49,9 @@ class ScanList extends StatelessWidget {
                     child: Align(
                         alignment: Alignment.center,
                         child: SpinKitRipple(
-                            color: Theme.of(_context).textSelectionColor)))),
+                            color: Theme.of(_context)
+                                .textSelectionTheme
+                                .selectionColor)))),
         Expanded(
             child: ListView.separated(
                 shrinkWrap: true,

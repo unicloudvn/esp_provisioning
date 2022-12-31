@@ -34,13 +34,14 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
           return null;
         },
         decoration: InputDecoration(
-            suffixIcon: FlatButton(
+            suffixIcon: TextButton(
                 onPressed: () {
                   setState(() {
                     isObscureText = !isObscureText;
                   });
                 },
-                child: Icon(isObscureText ? Icons.remove_red_eye : Icons.lock_outline,
+                child: Icon(
+                    isObscureText ? Icons.remove_red_eye : Icons.lock_outline,
                     color: Theme.of(context).accentColor)),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),

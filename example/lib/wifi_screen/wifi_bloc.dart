@@ -6,7 +6,7 @@ import '../ble_service.dart';
 import './wifi.dart';
 
 class WifiBloc extends Bloc<WifiEvent, WifiState> {
-  var bleService = BleService.getInstance();
+  // var bleService = BleService.getInstance();
   EspProv prov;
   Logger log = Logger(printer: PrettyPrinter());
 
@@ -26,7 +26,7 @@ class WifiBloc extends Bloc<WifiEvent, WifiState> {
   Stream<WifiState> _mapLoadToState() async* {
     yield WifiStateConnecting();
     try {
-      prov = await bleService.startProvisioning();
+      // prov = await bleService.startProvisioning();
     } catch (e) {
       log.e('Error conencting to device $e');
       yield WifiStateError('Error conencting to device');

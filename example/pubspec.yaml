@@ -16,7 +16,7 @@ dependencies:
   logger: ^1.0.0
   permission_handler: ^7.0.0
   equatable: ^2.0.0
-  rxdart: ^0.26.0
+  rxdart: ^0.27.7
   flutter_spinkit: ^5.0.0
   location: ^4.1.1
 
