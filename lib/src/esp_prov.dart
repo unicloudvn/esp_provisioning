@@ -2,33 +2,33 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:esp_provisioning/src/connection_models.dart';
+import 'package:esp_provisioning/src/security/security.dart';
+import 'package:esp_provisioning/src/transport/transport.dart';
 
 import 'proto/dart/constants.pbenum.dart';
 import 'proto/dart/session.pb.dart';
 import 'proto/dart/wifi_config.pb.dart';
 import 'proto/dart/wifi_scan.pb.dart';
-import 'security.dart';
-import 'transport.dart';
 
 class EspProv {
   ProvTransport transport;
   ProvSecurity security;
 
-  EspProv({this.transport, this.security});
+  EspProv({required this.transport, required this.security});
 
   Future<void> establishSession() async {
-    SessionData responseData;
+    SessionData responseData = SessionData();
 
     await transport.disconnect();
 
-    if(await transport.connect()){
-      while (await transport.checkConnect()) {
+    if (await transport.connect()) {
+      while (await transport.isConnected()) {
         var request = await security.securitySession(responseData);
         if (request == null) {
           return;
         }
-        var response =
-            await transport.sendReceive('prov-session', request.writeToBuffer());
+        var response = await transport.sendReceive(
+            'prov-session', request.writeToBuffer());
         if (response.isEmpty) {
           throw Exception('Empty response');
         }
@@ -146,7 +146,7 @@ class EspProv {
     return ret;
   }
 
-  Future<bool> sendWifiConfig({String ssid, String password}) async {
+  Future<bool> sendWifiConfig({String ssid = '', String password = ''}) async {
     var payload = WiFiConfigPayload();
     payload.msg = WiFiConfigMsgType.TypeCmdSetConfig;
 
@@ -171,7 +171,7 @@ class EspProv {
     return (respPayload.respApplyConfig.status == Status.Success);
   }
 
-  Future<ConnectionStatus> getStatus() async {
+  Future<ConnectionStatus?> getStatus() async {
     var payload = WiFiConfigPayload();
     payload.msg = WiFiConfigMsgType.TypeCmdGetStatus;
 
@@ -213,7 +213,7 @@ class EspProv {
       {int packageSize = 256}) async {
     var i = data.length;
     var offset = 0;
-    List<int> ret = new List<int>(0);
+    List<int> ret = [];
     while (i > 0) {
       var needToSend = data.sublist(offset, i < packageSize ? i : packageSize);
       var encrypted = await security.encrypt(needToSend);

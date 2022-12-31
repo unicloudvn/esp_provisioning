@@ -5,21 +5,25 @@ homepage: https://github.com/sunshine-tech/esp_provisioning.git
 author: Tuan PM <tuanpm@live.com>
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.10.0"
+  sdk: '>=2.18.0 <3.0.0'
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  protobuf: ^2.0.0
-  cryptography: ^2.0.1
-  collection: ^1.15.0
-  flutter_ble_lib: ^2.3.2
+  protobuf: ^2.1.0
+  cryptography: ^2.0.5
+  collection: ^1.16.0
+  pointycastle: ^3.6.2
+  flutter_blue: 
+    path: ../flutter_blue
+  # flutter_ble_lib: ^2.3.2
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^2.0.0
 
 
 flutter:

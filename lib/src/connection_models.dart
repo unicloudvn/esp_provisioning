@@ -17,15 +17,15 @@ class ConnectionStatus {
     this.failedReason,
   });
 
-  final WifiConnectionState state;
-  final String ip;
-  final WifiConnectFailedReason failedReason;
+  final WifiConnectionState? state;
+  final String? ip;
+  final WifiConnectFailedReason? failedReason;
 }
 
 class WifiAP {
   const WifiAP({
-    this.ssid,
-    this.rssi,
+    required this.ssid,
+    required this.rssi,
     this.active = false,
     this.private = true,
   });
