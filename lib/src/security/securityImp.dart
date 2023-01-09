@@ -34,12 +34,12 @@ class Security1 implements ProvSecurity {
   @override
   Future<Uint8List> encrypt(Uint8List data) async {
     _verbose('raw before process ${data.toString()}');
-    return crypt.encrypt(data);
+    return crypt.crypt(data);
   }
 
   @override
   Future<Uint8List> decrypt(Uint8List data) async {
-    return crypt.decrypt(data);
+    return encrypt(data);
   }
 
   Future<void> _generateKey() async {
@@ -82,8 +82,7 @@ class Security1 implements ProvSecurity {
     setupRequest.secVer = SecSchemeVersion.SecScheme1;
     await _generateKey();
     SessionCmd0 sc0 = SessionCmd0();
-    List<int> temp =
-        await clientKey.extractPublicKey().then((value) => value.bytes);
+    List<int> temp = (await clientKey.extractPublicKey()).bytes;
     sc0.clientPubkey = temp;
     // await clientKey.extractPublicKey().byte;
     Sec1Payload sec1 = Sec1Payload();
@@ -154,7 +153,7 @@ class Security1 implements ProvSecurity {
       Function eq = const ListEquality().equals;
       List<int> temp =
           await clientKey.extractPublicKey().then((value) => value.bytes);
-      if (!eq(encClientPubkey, temp)) {
+      if (!eq(List.from(encClientPubkey), temp)) {
         throw Exception('Mismatch in device verify');
       }
       return null;

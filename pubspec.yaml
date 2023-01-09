@@ -15,8 +15,9 @@ dependencies:
   cryptography: ^2.0.5
   collection: ^1.16.0
   pointycastle: ^3.6.2
-  flutter_blue: 
-    path: ../flutter_blue
+  flutter_blue_plus: ^1.3.1
+  # flutter_blue: 
+  #   path: ../flutter_blue
   # flutter_ble_lib: ^2.3.2
 
 

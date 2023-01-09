@@ -11,17 +11,17 @@ import 'proto/dart/wifi_config.pb.dart';
 import 'proto/dart/wifi_scan.pb.dart';
 
 class EspProv {
-  ProvTransport transport;
-  ProvSecurity security;
+  final ProvTransport transport;
+  final ProvSecurity security;
 
   EspProv({required this.transport, required this.security});
 
   Future<void> establishSession() async {
     SessionData responseData = SessionData();
+    final check = await transport.connect();
+    if (check) {
+      print("connencted");
 
-    await transport.disconnect();
-
-    if (await transport.connect()) {
       while (await transport.isConnected()) {
         var request = await security.securitySession(responseData);
         if (request == null) {
@@ -29,6 +29,7 @@ class EspProv {
         }
         var response = await transport.sendReceive(
             'prov-session', request.writeToBuffer());
+        print(response);
         if (response.isEmpty) {
           throw Exception('Empty response');
         }
@@ -219,7 +220,7 @@ class EspProv {
       var encrypted = await security.encrypt(needToSend);
       var newData = await transport.sendReceive('custom-data', encrypted);
 
-      if (newData.length > 0) {
+      if (newData.isNotEmpty) {
         var decrypted = await security.decrypt(newData);
         ret += List.from(decrypted);
       }

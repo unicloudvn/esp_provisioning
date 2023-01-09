@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+
 import 'transport.dart';
-import "package:flutter_blue/flutter_blue.dart";
+import "package:flutter_blue_plus/flutter_blue_plus.dart";
 
 class TransportBLE implements ProvTransport {
   final BluetoothDevice peripheral;
@@ -9,7 +10,7 @@ class TransportBLE implements ProvTransport {
   late Map<String, String> nuLookup;
   final Map<String, String> lockupTable;
   late BluetoothService bleService;
-  late BluetoothCharacteristic bleCharacter;
+  late BluetoothCharacteristic? bleCharacter;
 
   static const PROV_BLE_SERVICE = '021a9004-0382-4aea-bff4-6b3f1c5adfb4';
   static const PROV_BLE_EP = {
@@ -34,41 +35,56 @@ class TransportBLE implements ProvTransport {
 
   @override
   Future<bool> connect() async {
-    if (await isConnected()) {
-      return Future.value(true);
-    }
-    await peripheral.connect(
-        autoConnect: true, timeout: const Duration(seconds: 30));
-    await peripheral.requestMtu(512);
-    final services = await peripheral.discoverServices();
-    if (services.isEmpty) {
+    try {
+      if (await isConnected()) {
+        return true;
+      }
+      await peripheral.connect(
+          autoConnect: false, timeout: const Duration(seconds: 30));
+      await peripheral.requestMtu(512);
+      final services = (await peripheral.discoverServices()).where((element) {
+        return element.uuid.toString() == serviceUUID;
+      }).toList();
+
+      if (services.isEmpty) {
+        return false;
+      }
+      bleService = services[0];
+      return true;
+    } catch (e) {
       return false;
     }
-    for (BluetoothService s in services) {
-      if (s.uuid.toString() == PROV_BLE_SERVICE) {
-        bleService = s;
-        break;
-      }
-    }
-    return await isConnected();
   }
 
   @override
   Future<Uint8List> sendReceive(String epName, Uint8List data) async {
+    if (!(await isConnected())) {
+      return Uint8List.fromList([]);
+    }
     if (data.isNotEmpty) {
-      for (var c in bleService.characteristics) {
-        if (c.uuid.toString() == (epName)) {
+      await Future.forEach(bleService.characteristics, (c) async {
+        if (c.uuid.toString() == (nuLookup[epName])) {
           bleCharacter = c;
-          await bleCharacter.write(List.from(data), withoutResponse: true);
-          break;
+        }
+      });
+      if (bleCharacter != null) {
+        try {
+          await bleCharacter?.write(List.from(data));
+        } catch (e) {
+          debugPrint(e.toString());
         }
       }
-      // await peripheral.writeCharacteristic(
-      //     serviceUUID, nuLookup[epName ?? ""], data, true);
     }
-
-    List<int> receivedData = await bleCharacter.read();
-    return Uint8List.fromList(receivedData);
+    if (bleCharacter != null) {
+      try {
+        List<int> receivedData = await bleCharacter!.read();
+        return Uint8List.fromList(receivedData);
+      } catch (e) {
+        debugPrint(e.toString());
+        return Uint8List.fromList([]);
+      }
+    }
+    return Uint8List.fromList([]);
   }
 
   @override
@@ -83,6 +99,6 @@ class TransportBLE implements ProvTransport {
 
   @override
   Future<bool> isConnected() async {
-    return (await peripheral.state.last) == BluetoothDeviceState.connected;
+    return (await peripheral.state.first) == BluetoothDeviceState.connected;
   }
 }
