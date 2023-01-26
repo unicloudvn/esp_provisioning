@@ -66,7 +66,7 @@ class _BleScreenState extends State<BleScreen> {
             }
 
             return Center(
-              child: SpinKitRipple(color: Theme.of(context).textSelectionColor),
+              child: SpinKitRipple(color: Theme.of(context).textSelectionTheme.selectionColor),
             );
           },
         ),
