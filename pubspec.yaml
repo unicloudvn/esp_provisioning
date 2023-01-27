@@ -2,7 +2,6 @@ name: esp_provisioning
 description: Espressif Provisioning library
 version: 1.0.0+6
 homepage: https://github.com/sunshine-tech/esp_provisioning.git
-author: Tuan PM <tuanpm@live.com>
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -14,7 +13,6 @@ dependencies:
   protobuf: ^2.0.0
   cryptography: ^2.0.1
   collection: ^1.15.0
-  flutter_ble_lib: ^2.3.2
 
 
 dev_dependencies:

@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:esp_provisioning/esp_provisioning.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
-
-import 'transport.dart';
 
 class TransportBLE implements ProvTransport {
   final Peripheral peripheral;
