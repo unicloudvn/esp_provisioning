@@ -8,7 +8,7 @@ import 'ble.dart';
 class BleBloc extends Bloc<BleEvent, BleState> {
   var bleService = BleService.getInstance();
   StreamSubscription<ScanResult> _scanSubscription;
-  List<Map<String, dynamic>> bleDevices = new List<Map<String, dynamic>>();
+  List<Map<String, dynamic>> bleDevices = [];
 
   BleBloc(BleState initialState) : super(initialState);
 
@@ -58,7 +58,8 @@ class BleBloc extends Bloc<BleEvent, BleState> {
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
+    super.close();
     _scanSubscription?.cancel();
     bleService.stopScanBle();
   }
