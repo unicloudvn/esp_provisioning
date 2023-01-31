@@ -2,8 +2,8 @@
 //  Generated code. Do not modify.
 //  source: session.proto
 //
-// @dart = 2.3
-// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
+// @dart = 2.12
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:core' as $core;
 
@@ -28,20 +28,44 @@ class SessionData extends $pb.GeneratedMessage {
     11 : SessionData_Proto.sec1,
     0 : SessionData_Proto.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('SessionData', createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SessionData', createEmptyInstance: create)
     ..oo(0, [10, 11])
-    ..e<SecSchemeVersion>(2, 'secVer', $pb.PbFieldType.OE, defaultOrMaker: SecSchemeVersion.SecScheme0, valueOf: SecSchemeVersion.valueOf, enumValues: SecSchemeVersion.values)
-    ..aOM<$1.Sec0Payload>(10, 'sec0', subBuilder: $1.Sec0Payload.create)
-    ..aOM<$2.Sec1Payload>(11, 'sec1', subBuilder: $2.Sec1Payload.create)
+    ..e<SecSchemeVersion>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'secVer', $pb.PbFieldType.OE, defaultOrMaker: SecSchemeVersion.SecScheme0, valueOf: SecSchemeVersion.valueOf, enumValues: SecSchemeVersion.values)
+    ..aOM<$1.Sec0Payload>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sec0', subBuilder: $1.Sec0Payload.create)
+    ..aOM<$2.Sec1Payload>(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sec1', subBuilder: $2.Sec1Payload.create)
     ..hasRequiredFields = false
   ;
 
   SessionData._() : super();
-  factory SessionData() => create();
+  factory SessionData({
+    SecSchemeVersion? secVer,
+    $1.Sec0Payload? sec0,
+    $2.Sec1Payload? sec1,
+  }) {
+    final _result = create();
+    if (secVer != null) {
+      _result.secVer = secVer;
+    }
+    if (sec0 != null) {
+      _result.sec0 = sec0;
+    }
+    if (sec1 != null) {
+      _result.sec1 = sec1;
+    }
+    return _result;
+  }
   factory SessionData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory SessionData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   SessionData clone() => SessionData()..mergeFromMessage(this);
-  SessionData copyWith(void Function(SessionData) updates) => super.copyWith((message) => updates(message as SessionData));
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  SessionData copyWith(void Function(SessionData) updates) => super.copyWith((message) => updates(message as SessionData)) as SessionData; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static SessionData create() => SessionData._();
@@ -49,9 +73,9 @@ class SessionData extends $pb.GeneratedMessage {
   static $pb.PbList<SessionData> createRepeated() => $pb.PbList<SessionData>();
   @$core.pragma('dart2js:noInline')
   static SessionData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SessionData>(create);
-  static SessionData _defaultInstance;
+  static SessionData? _defaultInstance;
 
-  SessionData_Proto whichProto() => _SessionData_ProtoByTag[$_whichOneof(0)];
+  SessionData_Proto whichProto() => _SessionData_ProtoByTag[$_whichOneof(0)]!;
   void clearProto() => clearField($_whichOneof(0));
 
   @$pb.TagNumber(2)
