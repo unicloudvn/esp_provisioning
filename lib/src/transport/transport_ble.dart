@@ -40,7 +40,7 @@ class TransportBLE implements ProvTransport {
         return true;
       }
       await peripheral.connect(
-          autoConnect: false, timeout: const Duration(seconds: 30));
+          autoConnect: true, timeout: const Duration(seconds: 30));
       await peripheral.requestMtu(512);
       final services = (await peripheral.discoverServices()).where((element) {
         return element.uuid.toString() == serviceUUID;
@@ -62,11 +62,14 @@ class TransportBLE implements ProvTransport {
       return Uint8List.fromList([]);
     }
     if (data.isNotEmpty) {
+      // if (bleCharacter == null) {
       await Future.forEach(bleService.characteristics, (c) async {
         if (c.uuid.toString() == (nuLookup[epName])) {
           bleCharacter = c;
         }
       });
+      // }
+
       if (bleCharacter != null) {
         try {
           await bleCharacter?.write(List.from(data));
@@ -99,6 +102,13 @@ class TransportBLE implements ProvTransport {
 
   @override
   Future<bool> isConnected() async {
-    return (await peripheral.state.first) == BluetoothDeviceState.connected;
+    // while ((await peripheral.state.first) == BluetoothDeviceState.connecting);
+    print(await peripheral.state.first);
+    if (await peripheral.state.first != BluetoothDeviceState.connected) {
+      await Future.delayed(const Duration(seconds: 5));
+      return (await peripheral.state.first) == BluetoothDeviceState.connected;
+    } else {
+      return (await peripheral.state.first) == BluetoothDeviceState.connected;
+    }
   }
 }
