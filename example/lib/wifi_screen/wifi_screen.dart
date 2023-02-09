@@ -33,36 +33,31 @@ class _WiFiScreenState extends State<WiFiScreen> {
     List<Widget> _statusWidget = [
       Column(
         children: <Widget>[
-          FlatButton.icon(
-              onPressed: () {},
-              icon: SpinKitThreeBounce(
-                color: Colors.black,
-                size: 20,
-              ),
-              label: Text('Connecting..'))
+          IconButton(
+            onPressed: () {},
+            icon: SpinKitThreeBounce(
+              color: Colors.black,
+              size: 20,
+            ),
+          )
         ],
       ),
       Column(
         children: <Widget>[
-          FlatButton.icon(
-              onPressed: () {},
-              icon: Icon(
-                Icons.check,
-                color: Colors.green,
-              ),
-              label: Text(
-                'Connected',
-                style: TextStyle(
-                  color: Colors.green,
-                ),
-              )),
-          FlatButton.icon(
-              onPressed: () {},
-              icon: SpinKitThreeBounce(
-                color: Colors.black,
-                size: 20,
-              ),
-              label: Text('Scanning...'))
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: SpinKitThreeBounce(
+              color: Colors.black,
+              size: 20,
+            ),
+          )
         ],
       )
     ];
@@ -72,7 +67,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
       wifiList = Expanded(
           child: ScanList(state.wifiList, Icons.wifi, disableLoading: true,
               onTap: (Map<String, dynamic> item, BuildContext _context) {
-                _showDialog(item, _context);
+        _showDialog(item, _context);
       }));
     }
     var body = Expanded(child: Container());
@@ -80,8 +75,10 @@ class _WiFiScreenState extends State<WiFiScreen> {
     if (step < 2) {
       statusWidget = Expanded(child: _statusWidget[step]);
       body = Expanded(
-          child:
-              SpinKitDoubleBounce(color: Theme.of(context).textSelectionColor));
+        child: SpinKitDoubleBounce(
+          color: Colors.purple,
+        ),
+      );
     } else {
       body = wifiList;
     }
@@ -114,7 +111,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
         ),
       ),
       body: BlocProvider(
-        create: (BuildContext context) => WifiBloc(WifiStateLoading())..add(WifiEventLoad()),
+        create: (BuildContext context) => WifiBloc()..add(WifiEventLoad()),
         child: BlocBuilder<WifiBloc, WifiState>(
           builder: (BuildContext context, WifiState state) {
             if (state is WifiStateConnecting) {
@@ -132,7 +129,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SpinKitThreeBounce(
-                      color: Theme.of(context).textSelectionColor,
+                      color: Colors.purple,
                       size: 20,
                     ),
                     Text('Provisioning',
@@ -144,16 +141,20 @@ class _WiFiScreenState extends State<WiFiScreen> {
             if (state is WifiStateProvisioned) {
               return Container(
                 child: Center(
-                  child: MaterialButton(child: Text('Done'), color: Colors.redAccent, onPressed: () {
-                    Navigator.of(context).pop();
-                  },),
+                  child: MaterialButton(
+                    child: Text('Done'),
+                    color: Colors.redAccent,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
               );
             }
             return Container(
               child: Center(
                 child: SpinKitThreeBounce(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Colors.purple,
                   size: 20,
                 ),
               ),

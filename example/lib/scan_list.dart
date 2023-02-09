@@ -25,7 +25,9 @@ class ScanList extends StatelessWidget {
         ),
         title: Text(
           item['name'] ?? item['ssid'],
-          style: TextStyle(color: Theme.of(_context).accentColor),
+          style: TextStyle(
+            color: Colors.purpleAccent,
+          ),
         ),
         trailing: Text(item['rssi'].toString()),
         onTap: () {
@@ -48,8 +50,7 @@ class ScanList extends StatelessWidget {
                     height: 80,
                     child: Align(
                         alignment: Alignment.center,
-                        child: SpinKitRipple(
-                            color: Theme.of(_context).textSelectionColor)))),
+                        child: SpinKitRipple(color: Colors.purple)))),
         Expanded(
             child: ListView.separated(
                 shrinkWrap: true,

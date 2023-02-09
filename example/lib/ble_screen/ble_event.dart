@@ -10,6 +10,7 @@ abstract class BleEvent extends Equatable {
 class BleEventStart extends BleEvent {}
 
 class BleEventPermissionDenied extends BleEvent {}
+
 class BleEventStopScan extends BleEvent {}
 
 class BleEventDeviceUpdated extends BleEvent {

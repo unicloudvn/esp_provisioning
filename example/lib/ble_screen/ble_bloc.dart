@@ -10,22 +10,40 @@ class BleBloc extends Bloc<BleEvent, BleState> {
   StreamSubscription<ScanResult> _scanSubscription;
   List<Map<String, dynamic>> bleDevices = new List<Map<String, dynamic>>();
 
-  BleBloc(BleState initialState) : super(initialState);
-
-  @override
-  Stream<BleState> mapEventToState(
-    BleEvent event,
-  ) async* {
-    if (event is BleEventStart) {
-      yield* _mapStartToState();
-    } else if (event is BleEventDeviceUpdated) {
-      yield BleStateLoaded(List.from(event.bleDevices));
-    } else if (event is BleEventSelect) {
-      bleService.select(event.selectedDevice['peripheral']);
-    } else if (event is BleEventStopScan) {
+  BleBloc() : super(BleStateLoading()) {
+    on<BleEventStart>((event, emit) async {
+      await for (final result in _mapStartToState()) {
+        emit(result);
+      }
+    });
+    on<BleEventDeviceUpdated>((event, emit) {
+      emit(BleStateLoaded(List.from(event.bleDevices)));
+    });
+    on<BleEventPermissionDenied>((event, emit) async {
+      emit(BleStatePermissionDenied());
+    });
+    on<BleEventStopScan>((event, emit) async {
       await bleService.stopScanBle();
-    }
+    });
+    on<BleEventSelect>((event, emit) async {
+      bleService.select(event.selectedDevice['peripheral']);
+    });
   }
+
+  // @override
+  // Stream<BleState> mapEventToState(
+  //   BleEvent event,
+  // ) async* {
+  //   if (event is BleEventStart) {
+  //     yield* _mapStartToState();
+  //   } else if (event is BleEventDeviceUpdated) {
+  //     yield BleStateLoaded(List.from(event.bleDevices));
+  //   } else if (event is BleEventSelect) {
+  //     bleService.select(event.selectedDevice['peripheral']);
+  //   } else if (event is BleEventStopScan) {
+  //     await bleService.stopScanBle();
+  //   }
+  // }
 
   Stream<BleState> _mapStartToState() async* {
     var permissionIsGranted = await bleService.requestBlePermissions();
@@ -59,7 +77,8 @@ class BleBloc extends Bloc<BleEvent, BleState> {
 
   @override
   Future<void> close() {
+    super.close();
     _scanSubscription?.cancel();
-    bleService.stopScanBle();
+    return bleService.stopScanBle();
   }
 }
