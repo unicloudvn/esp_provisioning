@@ -71,48 +71,27 @@ class TransportBLE implements ProvTransport {
   @override
   Future<Uint8List> sendReceive(String epName, Uint8List data) async {
     if (!(await isConnected())) {
-      return Uint8List.fromList([]);
+      throw "Device is not connect";
     }
-    // if (epName == 'prov-session') {
-    //   return await Future.forEach(bleService.characteristics, (c) async {
-    //     if (c.uuid.toString() == (nuLookup['custom-data'])) {
-    //       bleCharacter = c;
-    //     }
-    //   });
-    // }
+    if (bleCharacter == null) {
+      throw "charactor is null";
+    }
+
     if (data.isNotEmpty) {
-      // await Future.forEach(bleService.characteristics, (c) async {
-      //   if (c.uuid.toString() == (nuLookup[epName])) {
-      //     bleCharacter = c;
-      //   }
-      // });
-      if (bleCharacter != null) {
-        try {
-          await bleCharacter?.write(List.from(data));
-        } catch (e) {
-          debugPrint(e.toString());
-          rethrow;
-        }
-      }
-    }
-    if (bleCharacter != null) {
       try {
-        // if (epName == "prov-session") {
-        //   final stopwatch = Stopwatch();
-        //   stopwatch.start();
-        //   List<int> receivedData = await bleCharacter!.read();
-        //   stopwatch.stop();
-        //   print(stopwatch.elapsedMilliseconds);
-        //   return Uint8List.fromList(receivedData);
-        // }
-        List<int> receivedData = await bleCharacter!.read();
-        return Uint8List.fromList(receivedData);
+        await bleCharacter!.write(List.from(data));
       } catch (e) {
         debugPrint(e.toString());
         rethrow;
       }
     }
-    return Uint8List.fromList([32]);
+    try {
+      List<int> receivedData = await bleCharacter!.read();
+      return Uint8List.fromList(receivedData);
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 
   @override
