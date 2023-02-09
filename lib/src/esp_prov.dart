@@ -17,24 +17,24 @@ class EspProv {
   EspProv({required this.transport, required this.security});
 
   Future<void> establishSession() async {
-    SessionData responseData = SessionData();
+    // SessionData responseData = SessionData();
     final check = await transport.connect();
     if (check) {
       print("connencted");
 
-      while (await transport.isConnected()) {
-        var request = await security.securitySession(responseData);
-        if (request == null) {
-          return;
-        }
-        var response = await transport.sendReceive(
-            'prov-session', request.writeToBuffer());
-        print(response);
-        if (response.isEmpty) {
-          throw Exception('Empty response');
-        }
-        responseData = SessionData.fromBuffer(response);
-      }
+      // while (await transport.isConnected()) {
+      // var request = await security.securitySession(responseData);
+      // if (request == null) {
+      //   return;
+      // }
+      // var response =
+      // await transport.sendReceive('prov-session', Uint8List.fromList([]));
+      // print(response);
+      // if (response.isEmpty) {
+      //   throw Exception('Empty response');
+      // }
+      // responseData = SessionData.fromBuffer(response);
+      // }
     }
     return;
   }
@@ -216,15 +216,17 @@ class EspProv {
     var offset = 0;
     List<int> ret = [];
     while (i > 0) {
-      var needToSend = data.sublist(offset, i < packageSize ? i : packageSize);
-      var encrypted = await security.encrypt(needToSend);
-      var newData = await transport.sendReceive('custom-data', encrypted);
+      var needToSend =
+          data.sublist(offset, offset + (i < packageSize ? i : packageSize));
+      // var encrypted = await security.encrypt(needToSend);
+      final newData = await transport.sendReceive('custom-data', needToSend);
 
-      if (newData.isNotEmpty) {
-        var decrypted = await security.decrypt(newData);
-        ret += List.from(decrypted);
-      }
+      // if (newData.isNotEmpty) {
+      //   var decrypted = await security.decrypt(newData);
+      //   ret += List.from(decrypted);
+      // }
       i -= packageSize;
+      offset += packageSize;
     }
     return Uint8List.fromList(ret);
   }

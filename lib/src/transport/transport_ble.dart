@@ -12,13 +12,18 @@ class TransportBLE implements ProvTransport {
   late BluetoothService bleService;
   late BluetoothCharacteristic? bleCharacter;
 
-  static const PROV_BLE_SERVICE = '021a9004-0382-4aea-bff4-6b3f1c5adfb4';
+  //   00001801-0000-1000-8000-00805f9b34fb
+  // 000000ff-0000-1000-8000-00805f9b34fb
+
+  static const PROV_BLE_SERVICE =
+      "000000ff-0000-1000-8000-00805f9b34fb"; //"fb349b5f-8000-0080-0010-0000ee000000";
+  // static const PROV_BLE_SERVICE = '021a9004-0382-4aea-bff4-6b3f1c5adfb4';
   static const PROV_BLE_EP = {
     'prov-scan': 'ff50',
     'prov-session': 'ff51',
     'prov-config': 'ff52',
     'proto-ver': 'ff53',
-    'custom-data': 'ff54',
+    'custom-data': 'ff01', //'ff54',
   };
 
   TransportBLE(this.peripheral,
@@ -42,6 +47,7 @@ class TransportBLE implements ProvTransport {
       await peripheral.connect(
           autoConnect: false, timeout: const Duration(seconds: 30));
       await peripheral.requestMtu(512);
+      // print(Uint8List.view(buffer))
       final services = (await peripheral.discoverServices()).where((element) {
         return element.uuid.toString() == serviceUUID;
       }).toList();
@@ -49,7 +55,13 @@ class TransportBLE implements ProvTransport {
       if (services.isEmpty) {
         return false;
       }
+
       bleService = services[0];
+      await Future.forEach(bleService.characteristics, (c) async {
+        if (c.uuid.toString() == (nuLookup['custom-data'])) {
+          bleCharacter = c;
+        }
+      });
       return true;
     } catch (e) {
       return false;
@@ -61,30 +73,46 @@ class TransportBLE implements ProvTransport {
     if (!(await isConnected())) {
       return Uint8List.fromList([]);
     }
+    // if (epName == 'prov-session') {
+    //   return await Future.forEach(bleService.characteristics, (c) async {
+    //     if (c.uuid.toString() == (nuLookup['custom-data'])) {
+    //       bleCharacter = c;
+    //     }
+    //   });
+    // }
     if (data.isNotEmpty) {
-      await Future.forEach(bleService.characteristics, (c) async {
-        if (c.uuid.toString() == (nuLookup[epName])) {
-          bleCharacter = c;
-        }
-      });
+      // await Future.forEach(bleService.characteristics, (c) async {
+      //   if (c.uuid.toString() == (nuLookup[epName])) {
+      //     bleCharacter = c;
+      //   }
+      // });
       if (bleCharacter != null) {
         try {
           await bleCharacter?.write(List.from(data));
         } catch (e) {
           debugPrint(e.toString());
+          rethrow;
         }
       }
     }
     if (bleCharacter != null) {
       try {
+        // if (epName == "prov-session") {
+        //   final stopwatch = Stopwatch();
+        //   stopwatch.start();
+        //   List<int> receivedData = await bleCharacter!.read();
+        //   stopwatch.stop();
+        //   print(stopwatch.elapsedMilliseconds);
+        //   return Uint8List.fromList(receivedData);
+        // }
         List<int> receivedData = await bleCharacter!.read();
         return Uint8List.fromList(receivedData);
       } catch (e) {
         debugPrint(e.toString());
-        return Uint8List.fromList([]);
+        rethrow;
       }
     }
-    return Uint8List.fromList([]);
+    return Uint8List.fromList([32]);
   }
 
   @override
