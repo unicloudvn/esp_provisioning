@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:typed_data';
-import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:flutter_blue/flutter_blue.dart';
 import 'transport.dart';
 
 class TransportBLE implements ProvTransport {
-  final Peripheral peripheral;
+  final BluetoothDevice peripheral;
   // final BluetoothDevice bluetoothDevice;
   // List<BluetoothService> services;
+  final FlutterBluePlus bleManager = FlutterBluePlus.instance;
   final String serviceUUID;
   Map<String, String> nuLookup = {};
   final Map<String, String> lockupTable;
@@ -26,8 +27,11 @@ class TransportBLE implements ProvTransport {
   //     {"prov-config",  0x0002},
   //     {"proto-ver",    0x0003},
 
-  TransportBLE(this.peripheral,
-      {this.serviceUUID = PROV_BLE_SERVICE, this.lockupTable = PROV_BLE_EP}) {
+  TransportBLE(
+    this.peripheral, {
+    this.serviceUUID = PROV_BLE_SERVICE,
+    this.lockupTable = PROV_BLE_EP,
+  }) {
     nuLookup = new Map<String, String>();
 
     for (var name in lockupTable.keys) {
@@ -53,14 +57,17 @@ class TransportBLE implements ProvTransport {
     //   }
     // });
 
-    bool isConnected = await peripheral.isConnected();
+    bool isConnected = (await bleManager.connectedDevices).contains(peripheral);
     if (isConnected) {
       return Future.value(true);
     }
-    await peripheral.connect(requestMtu: 512);
-    await peripheral.discoverAllServicesAndCharacteristics(
-        transactionId: 'discoverAllServicesAndCharacteristics');
-    return await peripheral.isConnected();
+    await peripheral.connect();
+    await peripheral.requestMtu(512);
+
+    await peripheral.discoverServices();
+    // discoverAllServicesAndCharacteristics(
+    //     transactionId: 'discoverAllServicesAndCharacteristics');
+    return (await bleManager.connectedDevices).contains(peripheral);
   }
 
   Future<Uint8List> sendReceive(String epName, Uint8List data) async {
@@ -76,9 +83,23 @@ class TransportBLE implements ProvTransport {
         //           orElse: () => null);
         //   characteristic.write(data);
         // }
-        var res = await peripheral.writeCharacteristic(
-            serviceUUID, nuLookup[epName ?? ""], data, true);
-        log("CHARACTERISTIC $res");
+        List<BluetoothService> services = await peripheral.discoverServices();
+        for (int i = 0; i < services.length; i++) {
+          if (services[i].uuid.toString() == serviceUUID) {
+            var characteristics = services[i].characteristics;
+            for (BluetoothCharacteristic c in characteristics) {
+              if (c.uuid.toString() == nuLookup[epName ?? ""]) {
+                log("WRITING DATA");
+                await Future.delayed(const Duration(milliseconds: 500));
+                var resp = await c.write(data);
+                log("RESPONSE $resp");
+              }
+            }
+          }
+        }
+        // var res = await peripheral.writeCharacteristic(
+        //     serviceUUID, nuLookup[epName ?? ""], data, true);
+        // log("CHARACTERISTIC $res");
       }
     }
 
@@ -93,10 +114,27 @@ class TransportBLE implements ProvTransport {
     //   return characteristic.read();
     // }
 
-    CharacteristicWithValue receivedData = await peripheral.readCharacteristic(
-        serviceUUID, nuLookup[epName ?? ""],
-        transactionId: 'readCharacteristic');
-    return receivedData.value;
+    List<BluetoothService> services = await peripheral.discoverServices();
+    for (int i = 0; i < services.length; i++) {
+      if (services[i].uuid.toString() == serviceUUID) {
+        var characteristics = services[i].characteristics;
+        for (BluetoothCharacteristic c in characteristics) {
+          if (c.uuid.toString() == nuLookup[epName ?? ""] &&
+              c.properties.read) {
+            log("READ CHARACTERISTIC ${c.uuid.toString()} ${nuLookup[epName ?? ""]}");
+            await Future.delayed(const Duration(milliseconds: 500));
+            List<int> value = await c.read();
+            log("VALUE $value");
+            return value;
+          }
+        }
+      }
+    }
+
+    // List<int> receivedData = await peripheral.readCharacteristic(
+    //     serviceUUID, nuLookup[epName ?? ""],
+    //     transactionId: 'readCharacteristic');
+    // return receivedData.value;
   }
 
   Future<void> disconnect() async {
@@ -108,9 +146,9 @@ class TransportBLE implements ProvTransport {
     //   }
     // });
 
-    bool check = await peripheral.isConnected();
+    bool check = (await bleManager.connectedDevices).contains(peripheral);
     if (check) {
-      return await peripheral.disconnectOrCancelConnection();
+      return await peripheral.disconnect();
     } else {
       return;
     }
@@ -118,7 +156,7 @@ class TransportBLE implements ProvTransport {
 
   Future<bool> checkConnect() async {
     log("INSIDE CHECK CONNECT FUNCTION");
-    return await peripheral.isConnected();
+    return (await bleManager.connectedDevices).contains(peripheral);
     // bluetoothDevice.state.listen((state) async {
     //   if (state == BluetoothDeviceState.connected) {
     //     return true;

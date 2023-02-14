@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:esp_provisioning_example/ble_service.dart';
-import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:rxdart/rxdart.dart';
 import 'ble.dart';
 
 class BleBloc extends Bloc<BleEvent, BleState> {
   var bleService = BleService.getInstance();
-  StreamSubscription<ScanResult> _scanSubscription;
-  List<Map<String, dynamic>> bleDevices = new List<Map<String, dynamic>>();
+  StreamSubscription<List<ScanResult>> _scanSubscription;
+  List<Map<String, dynamic>> bleDevices = [];
 
   BleBloc() : super(BleStateLoading()) {
     on<BleEventStart>((event, emit) async {
@@ -52,7 +52,7 @@ class BleBloc extends Bloc<BleEvent, BleState> {
       return;
     }
     var bleState = await bleService.start();
-    if (bleState == BluetoothState.UNAUTHORIZED) {
+    if (bleState == BluetoothState.unauthorized) {
       add(BleEventPermissionDenied());
       return;
     }
@@ -60,17 +60,19 @@ class BleBloc extends Bloc<BleEvent, BleState> {
     _scanSubscription = bleService
         .scanBle()
         .debounce((_) => TimerStream(true, Duration(milliseconds: 100)))
-        .listen((ScanResult scanResult) {
-      var bleDevice = BleDevice(scanResult);
-      if (scanResult.advertisementData.localName != null) {
-        var idx = bleDevices.indexWhere((e) => e['id'] == bleDevice.id);
+        .listen((List<ScanResult> scanResult) {
+      for (int i = 0; i < scanResult.length; i++) {
+        var bleDevice = BleDevice(scanResult[i]);
+        if (scanResult[i].advertisementData.localName != null) {
+          var idx = bleDevices.indexWhere((e) => e['id'] == bleDevice.id);
 
-        if (idx < 0) {
-          bleDevices.add(bleDevice.toMap());
-        } else {
-          bleDevices[idx] = bleDevice.toMap();
+          if (idx < 0) {
+            bleDevices.add(bleDevice.toMap());
+          } else {
+            bleDevices[idx] = bleDevice.toMap();
+          }
+          add(BleEventDeviceUpdated(bleDevices));
         }
-        add(BleEventDeviceUpdated(bleDevices));
       }
     });
   }

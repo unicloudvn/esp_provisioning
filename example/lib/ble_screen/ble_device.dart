@@ -1,16 +1,18 @@
 import 'package:collection/collection.dart';
-import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class BleDevice {
-  final Peripheral peripheral;
+  final BluetoothDevice peripheral;
   final String name;
   int rssi;
 
-  String get id => peripheral.identifier;
+  String get id => peripheral.id.id;
 
   BleDevice(ScanResult scanResult)
-      : peripheral = scanResult.peripheral,
-        name = scanResult.peripheral.name ?? scanResult.advertisementData.localName ?? "Unknown",
+      : peripheral = scanResult.device,
+        name = scanResult.device.name ??
+            scanResult.advertisementData.localName ??
+            "Unknown",
         rssi = scanResult.rssi;
 
   @override

@@ -15,9 +15,10 @@ dependencies:
   protobuf: ^2.0.0
   cryptography: ^2.0.1
   collection: ^1.15.0
-  # flutter_blue: ^0.8.0
-  flutter_ble_lib:
-    path: ../FlutterBleLib/
+  # The following packages is integrated to scan and connect to BLE Device, this package is actively maintained as of Feb,2023.
+  flutter_blue_plus: ^1.4.0
+  # flutter_ble_lib:
+  #   path: ../FlutterBleLib/
     # git:
     #   url: https://github.com/villageenergy/FlutterBleLib.git
 
