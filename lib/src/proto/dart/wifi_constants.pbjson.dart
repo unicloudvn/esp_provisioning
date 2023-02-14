@@ -2,9 +2,13 @@
 //  Generated code. Do not modify.
 //  source: wifi_constants.proto
 //
-// @dart = 2.3
-// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
+// @dart = 2.12
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,deprecated_member_use_from_same_package,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
+import 'dart:core' as $core;
+import 'dart:convert' as $convert;
+import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use wifiStationStateDescriptor instead')
 const WifiStationState$json = const {
   '1': 'WifiStationState',
   '2': const [
@@ -15,6 +19,9 @@ const WifiStationState$json = const {
   ],
 };
 
+/// Descriptor for `WifiStationState`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List wifiStationStateDescriptor = $convert.base64Decode('ChBXaWZpU3RhdGlvblN0YXRlEg0KCUNvbm5lY3RlZBAAEg4KCkNvbm5lY3RpbmcQARIQCgxEaXNjb25uZWN0ZWQQAhIUChBDb25uZWN0aW9uRmFpbGVkEAM=');
+@$core.Deprecated('Use wifiConnectFailedReasonDescriptor instead')
 const WifiConnectFailedReason$json = const {
   '1': 'WifiConnectFailedReason',
   '2': const [
@@ -23,6 +30,9 @@ const WifiConnectFailedReason$json = const {
   ],
 };
 
+/// Descriptor for `WifiConnectFailedReason`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List wifiConnectFailedReasonDescriptor = $convert.base64Decode('ChdXaWZpQ29ubmVjdEZhaWxlZFJlYXNvbhINCglBdXRoRXJyb3IQABITCg9OZXR3b3JrTm90Rm91bmQQAQ==');
+@$core.Deprecated('Use wifiAuthModeDescriptor instead')
 const WifiAuthMode$json = const {
   '1': 'WifiAuthMode',
   '2': const [
@@ -35,6 +45,9 @@ const WifiAuthMode$json = const {
   ],
 };
 
+/// Descriptor for `WifiAuthMode`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List wifiAuthModeDescriptor = $convert.base64Decode('CgxXaWZpQXV0aE1vZGUSCAoET3BlbhAAEgcKA1dFUBABEgsKB1dQQV9QU0sQAhIMCghXUEEyX1BTSxADEhAKDFdQQV9XUEEyX1BTSxAEEhMKD1dQQTJfRU5URVJQUklTRRAF');
+@$core.Deprecated('Use wifiConnectedStateDescriptor instead')
 const WifiConnectedState$json = const {
   '1': 'WifiConnectedState',
   '2': const [
@@ -46,3 +59,5 @@ const WifiConnectedState$json = const {
   ],
 };
 
+/// Descriptor for `WifiConnectedState`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List wifiConnectedStateDescriptor = $convert.base64Decode('ChJXaWZpQ29ubmVjdGVkU3RhdGUSGQoIaXA0X2FkZHIYASABKAlSB2lwNEFkZHISKgoJYXV0aF9tb2RlGAIgASgOMg0uV2lmaUF1dGhNb2RlUghhdXRoTW9kZRISCgRzc2lkGAMgASgMUgRzc2lkEhQKBWJzc2lkGAQgASgMUgVic3NpZBIYCgdjaGFubmVsGAUgASgFUgdjaGFubmVs');

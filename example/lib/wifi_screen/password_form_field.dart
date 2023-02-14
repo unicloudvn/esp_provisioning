@@ -34,7 +34,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
           return null;
         },
         decoration: InputDecoration(
-            suffixIcon: FlatButton(
+            suffixIcon: TextButton(
                 onPressed: () {
                   setState(() {
                     isObscureText = !isObscureText;

@@ -33,7 +33,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
     List<Widget> _statusWidget = [
       Column(
         children: <Widget>[
-          FlatButton.icon(
+          TextButton.icon(
               onPressed: () {},
               icon: SpinKitThreeBounce(
                 color: Colors.black,
@@ -44,7 +44,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
       ),
       Column(
         children: <Widget>[
-          FlatButton.icon(
+          TextButton.icon(
               onPressed: () {},
               icon: Icon(
                 Icons.check,
@@ -56,7 +56,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
                   color: Colors.green,
                 ),
               )),
-          FlatButton.icon(
+          TextButton.icon(
               onPressed: () {},
               icon: SpinKitThreeBounce(
                 color: Colors.black,
@@ -81,7 +81,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
       statusWidget = Expanded(child: _statusWidget[step]);
       body = Expanded(
           child:
-              SpinKitDoubleBounce(color: Theme.of(context).textSelectionColor));
+              SpinKitDoubleBounce(color: Theme.of(context).textSelectionTheme.selectionColor));
     } else {
       body = wifiList;
     }
@@ -132,7 +132,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SpinKitThreeBounce(
-                      color: Theme.of(context).textSelectionColor,
+                      color: Theme.of(context).textSelectionTheme.selectionColor,
                       size: 20,
                     ),
                     Text('Provisioning',
@@ -153,7 +153,7 @@ class _WiFiScreenState extends State<WiFiScreen> {
             return Container(
               child: Center(
                 child: SpinKitThreeBounce(
-                  color: Theme.of(context).textSelectionColor,
+                  color: Theme.of(context).textSelectionTheme.selectionColor,
                   size: 20,
                 ),
               ),
