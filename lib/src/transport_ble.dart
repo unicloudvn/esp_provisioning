@@ -62,7 +62,7 @@ class TransportBLE implements ProvTransport {
       return Future.value(true);
     }
     await peripheral.connect();
-    await peripheral.requestMtu(512);
+    // await peripheral.requestMtu(512);
 
     await peripheral.discoverServices();
     // discoverAllServicesAndCharacteristics(
@@ -71,70 +71,49 @@ class TransportBLE implements ProvTransport {
   }
 
   Future<Uint8List> sendReceive(String epName, Uint8List data) async {
+    List<BluetoothService> services = await peripheral.discoverServices();
+
     log("EP NAME $epName DATA $data");
     if (data != null) {
       if (data.length > 0) {
-        // BluetoothService service = services.firstWhere(
-        //     (s) => s.uuid.toString() == serviceUUID,
-        //     orElse: () => null);
-        // if (service != null) {
-        //   BluetoothCharacteristic characteristic = service.characteristics
-        //       .firstWhere((c) => c.uuid.toString() == nuLookup[epName ?? ""],
-        //           orElse: () => null);
-        //   characteristic.write(data);
-        // }
-        List<BluetoothService> services = await peripheral.discoverServices();
         for (int i = 0; i < services.length; i++) {
           if (services[i].uuid.toString() == serviceUUID) {
             var characteristics = services[i].characteristics;
             for (BluetoothCharacteristic c in characteristics) {
               if (c.uuid.toString() == nuLookup[epName ?? ""]) {
-                log("WRITING DATA");
-                await Future.delayed(const Duration(milliseconds: 500));
-                var resp = await c.write(data);
-                log("RESPONSE $resp");
+                log("WAIT FOR 2 SECONDS");
+                await Future.delayed(const Duration(seconds: 1));
+                log("WRITING DATA $i ${c.deviceId.toString()} ${c.uuid.toString()} ${c.serviceUuid.toString()} $data");
+
+                dynamic resp = await c.write(data, withoutResponse: false);
+                log("WRITING DATA RESPONSE $resp");
               }
             }
           }
         }
-        // var res = await peripheral.writeCharacteristic(
-        //     serviceUUID, nuLookup[epName ?? ""], data, true);
-        // log("CHARACTERISTIC $res");
       }
     }
 
-    // BluetoothService service = services.firstWhere(
-    //     (s) => s.uuid.toString() == serviceUUID,
-    //     orElse: () => null);
-    // if (service != null) {
-    //   BluetoothCharacteristic characteristic = service.characteristics
-    //       .firstWhere((c) => c.uuid.toString() == nuLookup[epName ?? ""],
-    //           orElse: () => null);
-    //   await characteristic.write(data);
-    //   return characteristic.read();
-    // }
-
-    List<BluetoothService> services = await peripheral.discoverServices();
+    log("WRITE DATA COMPLETE, NOW READING");
+    Uint8List readResponse;
     for (int i = 0; i < services.length; i++) {
       if (services[i].uuid.toString() == serviceUUID) {
         var characteristics = services[i].characteristics;
         for (BluetoothCharacteristic c in characteristics) {
           if (c.uuid.toString() == nuLookup[epName ?? ""] &&
               c.properties.read) {
+            log("WAIT FOR 2 SECONDS");
+            await Future.delayed(const Duration(seconds: 1));
             log("READ CHARACTERISTIC ${c.uuid.toString()} ${nuLookup[epName ?? ""]}");
-            await Future.delayed(const Duration(milliseconds: 500));
             List<int> value = await c.read();
             log("VALUE $value");
-            return value;
+            readResponse = value;
           }
         }
       }
     }
-
-    // List<int> receivedData = await peripheral.readCharacteristic(
-    //     serviceUUID, nuLookup[epName ?? ""],
-    //     transactionId: 'readCharacteristic');
-    // return receivedData.value;
+    log("READ DATA COMPLETE, RESPONSE $readResponse");
+    return readResponse;
   }
 
   Future<void> disconnect() async {
