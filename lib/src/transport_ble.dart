@@ -81,8 +81,8 @@ class TransportBLE implements ProvTransport {
             var characteristics = services[i].characteristics;
             for (BluetoothCharacteristic c in characteristics) {
               if (c.uuid.toString() == nuLookup[epName ?? ""]) {
-                log("WAIT FOR 300 MILLISECONDS");
-                await Future.delayed(const Duration(milliseconds: 300));
+                // log("WAIT FOR 300 MILLISECONDS");
+                // await Future.delayed(const Duration(milliseconds: 300));
                 log("WRITING DATA $i DEVICEID: ${c.deviceId.toString()} DEVICE UUID: ${c.uuid.toString()} SERVICE UUID: ${c.serviceUuid.toString()} DATA: $data");
                 dynamic resp = await c.write(data, withoutResponse: false);
                 log("WRITING DATA RESPONSE $resp");
@@ -101,8 +101,8 @@ class TransportBLE implements ProvTransport {
         for (BluetoothCharacteristic c in characteristics) {
           if (c.uuid.toString() == nuLookup[epName ?? ""] &&
               c.properties.read) {
-            log("WAIT FOR 300 MILLISECONDS");
-            await Future.delayed(const Duration(milliseconds: 300));
+            // log("WAIT FOR 300 MILLISECONDS");
+            // await Future.delayed(const Duration(milliseconds: 300));
             log("READ CHARACTERISTIC ${c.uuid.toString()} ${nuLookup[epName ?? ""]}");
             List<int> value = await c.read();
             log("VALUE $value");
