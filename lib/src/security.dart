@@ -10,9 +10,9 @@ enum SecurityState {
 }
 
 abstract class ProvSecurity {
-  Future<Uint8List> encrypt(Uint8List data);
+  Future<dynamic> encrypt(dynamic data);
 
-  Future<Uint8List> decrypt(Uint8List data);
+  Future<dynamic> decrypt(dynamic data);
 
   Future<SessionData> securitySession(SessionData responseData);
 }

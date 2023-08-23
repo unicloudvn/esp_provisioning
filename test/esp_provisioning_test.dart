@@ -5,7 +5,7 @@ import 'package:esp_provisioning/esp_provisioning.dart';
 void main() {
   const MethodChannel channel = MethodChannel('esp_provisioning');
 
-  TestWidgetsFlutterBinding.ensureInitialized();
+  // TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
@@ -17,6 +17,5 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-  });
+  test('getPlatformVersion', () async {});
 }

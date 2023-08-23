@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:collection/collection.dart';
@@ -31,12 +32,12 @@ class Security1 implements ProvSecurity {
     }
   }
 
-  Future<Uint8List> encrypt(Uint8List data) async {
+  Future<dynamic> encrypt(dynamic data) async {
     _verbose('raw before process ${data.toString()}');
     return crypt.crypt(data);
   }
 
-  Future<Uint8List> decrypt(Uint8List data) async {
+  Future<dynamic> decrypt(dynamic data) async {
     return encrypt(data);
   }
 
@@ -55,6 +56,7 @@ class Security1 implements ProvSecurity {
   }
 
   Future<SessionData> securitySession(SessionData responseData) async {
+    developer.log("SESSION STATE $sessionState");
     if (sessionState == SecurityState.REQUEST1) {
       sessionState = SecurityState.RESPONSE1_REQUEST2;
       return await setup0Request();
@@ -73,38 +75,43 @@ class Security1 implements ProvSecurity {
   }
 
   Future<SessionData> setup0Request() async {
+    developer.log("SET UP 0 REQUEST");
     _verbose('setup0Request');
     var setupRequest = new SessionData();
 
     setupRequest.secVer = SecSchemeVersion.SecScheme1;
     await _generateKey();
+    developer.log("GENERATE KEY COMPLETE");
     SessionCmd0 sc0 = SessionCmd0();
-    List<int> temp = await clientKey.extractPublicKey().then((value) => value.bytes);
+    List<int> temp =
+        await clientKey?.extractPublicKey().then((value) => value.bytes) ?? [];
+    developer.log("EXTRACT PUBLIC KEY COMPLETE $temp");
+
     sc0.clientPubkey = temp;
     // await clientKey.extractPublicKey().byte;
     Sec1Payload sec1 = Sec1Payload();
     sec1.sc0 = sc0;
     setupRequest.sec1 = sec1;
-    _verbose(
-        'setup0Request: clientPubkey = ${temp.toString()}');
+    _verbose('setup0Request: clientPubkey = ${temp.toString()}');
+    developer.log("SET UP REQUEST $setupRequest");
     return setupRequest;
   }
 
   Future<SessionData> setup0Response(SessionData responseData) async {
     SessionData setupResp = responseData;
-    if (setupResp.secVer != SecSchemeVersion.SecScheme1) {
+    if (setupResp?.secVer != SecSchemeVersion.SecScheme1) {
       throw Exception('Invalid sec scheme');
     }
-    devicePublicKey = SimplePublicKey(setupResp.sec1.sr0.devicePubkey,type: x25519.keyPairType);
-    deviceRandom = setupResp.sec1.sr0.deviceRandom;
+    devicePublicKey = SimplePublicKey(setupResp?.sec1.sr0.devicePubkey ?? [],
+        type: x25519.keyPairType);
+    deviceRandom = Uint8List.fromList(setupResp?.sec1.sr0.deviceRandom ?? []);
 
     _verbose(
-        'setup0Response:Device public key ${devicePublicKey.bytes.toString()}');
+        'setup0Response:Device public key ${devicePublicKey?.bytes.toString()}');
     _verbose('setup0Response:Device random ${deviceRandom.toString()}');
 
     final sharedKey = await x25519.sharedSecretKey(
-        keyPair: clientKey,
-        remotePublicKey: devicePublicKey);
+        keyPair: clientKey, remotePublicKey: devicePublicKey);
     var sharedK = await sharedKey.extractBytes();
     _verbose('setup0Response: Shared key calculated: ${sharedK.toString()}');
     if (pop != null) {
@@ -112,19 +119,21 @@ class Security1 implements ProvSecurity {
       sink.add(utf8.encode(pop));
       sink.close();
       final hash = await sink.hash();
-      sharedK = _xor(Uint8List.fromList(sharedK), Uint8List.fromList(hash.bytes));
+      sharedK =
+          _xor(Uint8List.fromList(sharedK), Uint8List.fromList(hash.bytes));
       _verbose(
           'setup0Response: pop: $pop, hash: ${hash.bytes.toString()} sharedK: ${sharedK.toString()}');
     }
-    await crypt.init(sharedK, deviceRandom);
+    await crypt.init(Uint8List.fromList(sharedK), deviceRandom);
     _verbose(
         'setup0Response: cipherSecretKey: ${sharedK.toString()} cipherNonce: ${deviceRandom.toString()}');
     return setupResp;
   }
 
   Future<SessionData> setup1Request(SessionData responseData) async {
-    _verbose('setup1Request ${devicePublicKey.bytes.toString()}');
-    var clientVerify = await encrypt(devicePublicKey.bytes);
+    _verbose('setup1Request ${devicePublicKey?.bytes.toString()}');
+    var clientVerify =
+        await encrypt(Uint8List.fromList(devicePublicKey?.bytes ?? []));
 
     _verbose('client verify ${clientVerify.toString()}');
     var setupRequest = SessionData();
@@ -141,14 +150,17 @@ class Security1 implements ProvSecurity {
   Future<SessionData> setup1Response(SessionData responseData) async {
     _verbose('setup1Response');
     var setupResp = responseData;
-    if (setupResp.secVer == SecSchemeVersion.SecScheme1) {
-      final deviceVerify = setupResp.sec1.sr1.deviceVerifyData;
+    if (setupResp?.secVer == SecSchemeVersion.SecScheme1) {
+      final deviceVerify = setupResp?.sec1.sr1.deviceVerifyData ?? [];
       _verbose('Device verify: ${deviceVerify.toString()}');
-      final encClientPubkey =
-          await decrypt(setupResp.sec1.sr1.deviceVerifyData);
+
+      final encClientPubkey = await decrypt(
+          Uint8List.fromList(setupResp?.sec1.sr1.deviceVerifyData ?? []));
       _verbose('Enc client pubkey: ${encClientPubkey.toString()}');
       Function eq = const ListEquality().equals;
-      List<int> temp = await clientKey.extractPublicKey().then((value) => value.bytes);
+      List<int> temp =
+          await clientKey?.extractPublicKey().then((value) => value.bytes) ??
+              [];
       if (!eq(encClientPubkey, temp)) {
         throw Exception('Mismatch in device verify');
       }

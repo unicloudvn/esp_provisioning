@@ -2,7 +2,8 @@ name: esp_provisioning
 description: Espressif Provisioning library
 version: 1.0.0+6
 homepage: https://github.com/sunshine-tech/esp_provisioning.git
-author: Tuan PM <tuanpm@live.com>
+# author: Tuan PM <tuanpm@live.com>
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -14,7 +15,12 @@ dependencies:
   protobuf: ^2.0.0
   cryptography: ^2.0.1
   collection: ^1.15.0
-  flutter_ble_lib: ^2.3.2
+  # The following packages is integrated to scan and connect to BLE Device, this package is actively maintained as of Feb,2023.
+  flutter_blue_plus: ^1.4.0
+  # flutter_ble_lib:
+  #   path: ../FlutterBleLib/
+    # git:
+    #   url: https://github.com/villageenergy/FlutterBleLib.git
 
 
 dev_dependencies:
@@ -30,3 +36,6 @@ flutter:
         pluginClass: EspProvisioningPlugin
       ios:
         pluginClass: EspProvisioningPlugin
+
+module:
+  androidX: true

@@ -19,7 +19,7 @@ class Status extends $pb.ProtobufEnum {
   static const Status CryptoError = Status._(6, 'CryptoError');
   static const Status InvalidSession = Status._(7, 'InvalidSession');
 
-  static const $core.List<Status> values = <Status> [
+  static const $core.List<Status> values = <Status>[
     Success,
     InvalidSecScheme,
     InvalidProto,
@@ -30,9 +30,9 @@ class Status extends $pb.ProtobufEnum {
     InvalidSession,
   ];
 
-  static final $core.Map<$core.int, Status> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static final $core.Map<$core.int, Status> _byValue =
+      $pb.ProtobufEnum.initByValue(values);
   static Status valueOf($core.int value) => _byValue[value];
 
   const Status._($core.int v, $core.String n) : super(v, n);
 }
-

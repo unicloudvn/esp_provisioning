@@ -10,14 +10,20 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class WiFiScanMsgType extends $pb.ProtobufEnum {
-  static const WiFiScanMsgType TypeCmdScanStart = WiFiScanMsgType._(0, 'TypeCmdScanStart');
-  static const WiFiScanMsgType TypeRespScanStart = WiFiScanMsgType._(1, 'TypeRespScanStart');
-  static const WiFiScanMsgType TypeCmdScanStatus = WiFiScanMsgType._(2, 'TypeCmdScanStatus');
-  static const WiFiScanMsgType TypeRespScanStatus = WiFiScanMsgType._(3, 'TypeRespScanStatus');
-  static const WiFiScanMsgType TypeCmdScanResult = WiFiScanMsgType._(4, 'TypeCmdScanResult');
-  static const WiFiScanMsgType TypeRespScanResult = WiFiScanMsgType._(5, 'TypeRespScanResult');
+  static const WiFiScanMsgType TypeCmdScanStart =
+      WiFiScanMsgType._(0, 'TypeCmdScanStart');
+  static const WiFiScanMsgType TypeRespScanStart =
+      WiFiScanMsgType._(1, 'TypeRespScanStart');
+  static const WiFiScanMsgType TypeCmdScanStatus =
+      WiFiScanMsgType._(2, 'TypeCmdScanStatus');
+  static const WiFiScanMsgType TypeRespScanStatus =
+      WiFiScanMsgType._(3, 'TypeRespScanStatus');
+  static const WiFiScanMsgType TypeCmdScanResult =
+      WiFiScanMsgType._(4, 'TypeCmdScanResult');
+  static const WiFiScanMsgType TypeRespScanResult =
+      WiFiScanMsgType._(5, 'TypeRespScanResult');
 
-  static const $core.List<WiFiScanMsgType> values = <WiFiScanMsgType> [
+  static const $core.List<WiFiScanMsgType> values = <WiFiScanMsgType>[
     TypeCmdScanStart,
     TypeRespScanStart,
     TypeCmdScanStatus,
@@ -26,9 +32,9 @@ class WiFiScanMsgType extends $pb.ProtobufEnum {
     TypeRespScanResult,
   ];
 
-  static final $core.Map<$core.int, WiFiScanMsgType> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static final $core.Map<$core.int, WiFiScanMsgType> _byValue =
+      $pb.ProtobufEnum.initByValue(values);
   static WiFiScanMsgType valueOf($core.int value) => _byValue[value];
 
   const WiFiScanMsgType._($core.int v, $core.String n) : super(v, n);
 }
-
