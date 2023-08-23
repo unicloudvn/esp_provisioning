@@ -64,7 +64,11 @@ class TransportBLE implements ProvTransport {
     await peripheral.connect();
     // await peripheral.requestMtu(512);
 
-    await peripheral.discoverServices();
+    try {
+      await peripheral.discoverServices();
+    } catch (e) {
+      return Future.error(e);
+    }
     // discoverAllServicesAndCharacteristics(
     //     transactionId: 'discoverAllServicesAndCharacteristics');
     return (await bleManager.connectedDevices).contains(peripheral);
