@@ -185,41 +185,47 @@ class EspProv {
   }
 
   Future<ConnectionStatus> getStatus() async {
-    var payload = WiFiConfigPayload();
-    payload.msg = WiFiConfigMsgType.TypeCmdGetStatus;
+    try {
+      log("INSIDE GET STATUS");
+      var payload = WiFiConfigPayload();
+      payload.msg = WiFiConfigMsgType.TypeCmdGetStatus;
 
-    var cmdGetStatus = CmdGetStatus();
-    payload.cmdGetStatus = cmdGetStatus;
+      var cmdGetStatus = CmdGetStatus();
+      payload.cmdGetStatus = cmdGetStatus;
 
-    var reqData = await security?.encrypt(payload.writeToBuffer());
-    var respData = await transport?.sendReceive('prov-config', reqData);
-    var respRaw = await security?.decrypt(respData);
-    var respPayload = WiFiConfigPayload.fromBuffer(respRaw?.toList() ?? []);
+      var reqData = await security?.encrypt(payload.writeToBuffer());
+      var respData = await transport?.sendReceive('prov-config', reqData);
+      var respRaw = await security?.decrypt(respData);
+      var respPayload = WiFiConfigPayload.fromBuffer(respRaw?.toList() ?? []);
 
-    if (respPayload.respGetStatus.staState.value == 0) {
-      return ConnectionStatus(
-          state: WifiConnectionState.Connected,
-          ip: respPayload.respGetStatus.connected.ip4Addr);
-    } else if (respPayload.respGetStatus.staState.value == 1) {
-      return ConnectionStatus(state: WifiConnectionState.Connecting);
-    } else if (respPayload.respGetStatus.staState.value == 2) {
-      return ConnectionStatus(state: WifiConnectionState.Disconnected);
-    } else if (respPayload.respGetStatus.staState.value == 3) {
-      if (respPayload.respGetStatus.failReason.value == 0) {
+      if (respPayload.respGetStatus.staState.value == 0) {
         return ConnectionStatus(
-          state: WifiConnectionState.ConnectionFailed,
-          failedReason: WifiConnectFailedReason.AuthError,
-        );
-      } else if (respPayload.respGetStatus.failReason.value == 1) {
-        return ConnectionStatus(
-          state: WifiConnectionState.ConnectionFailed,
-          failedReason: WifiConnectFailedReason.NetworkNotFound,
-        );
+            state: WifiConnectionState.Connected,
+            ip: respPayload.respGetStatus.connected.ip4Addr);
+      } else if (respPayload.respGetStatus.staState.value == 1) {
+        return ConnectionStatus(state: WifiConnectionState.Connecting);
+      } else if (respPayload.respGetStatus.staState.value == 2) {
+        return ConnectionStatus(state: WifiConnectionState.Disconnected);
+      } else if (respPayload.respGetStatus.staState.value == 3) {
+        if (respPayload.respGetStatus.failReason.value == 0) {
+          return ConnectionStatus(
+            state: WifiConnectionState.ConnectionFailed,
+            failedReason: WifiConnectFailedReason.AuthError,
+          );
+        } else if (respPayload.respGetStatus.failReason.value == 1) {
+          return ConnectionStatus(
+            state: WifiConnectionState.ConnectionFailed,
+            failedReason: WifiConnectFailedReason.NetworkNotFound,
+          );
+        }
+        return ConnectionStatus(state: WifiConnectionState.ConnectionFailed);
       }
-      return ConnectionStatus(state: WifiConnectionState.ConnectionFailed);
-    }
 
-    return null;
+      return null;
+    } catch (e) {
+      log("ERROR FETCHING STATUS $e");
+      return Future.error(e);
+    }
   }
 
   Future<Uint8List> sendReceiveCustomData(Uint8List data,
